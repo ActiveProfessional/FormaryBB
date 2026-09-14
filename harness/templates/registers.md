@@ -65,6 +65,23 @@ Statuses: TODO / DOING / DONE → (evidence) / N/A → (why). Deadlines get `[SL
 Flex modules extend the core chain without altering it. Models may propose; only the user
 activates **[U]**. Anchors say where the module slots in. See `harness/PHASES.md` "Flex modules".
 
+## roles.md
+| ID | Role | Type | Assignee | Scope | Status | Approved by | Date |
+|----|------|------|----------|-------|--------|-------------|------|
+| RL-001 | (proposed role — e.g. operations lead, bookkeeper, social media) | business | (vacant) | (what this role owns) | proposed | (awaiting [U]) | |
+
+System roles (founder, orchestrator, agent, professional) are seeded by `init` and need no
+approval. Business roles have **no defaults** — proposed with judgment, formalized only with
+**[U]**. Standing rule: always propose role separation early (see CONVENTIONS.md). IDs: `RL-nnn`.
+
+## config.md
+| ID | Key | Value | Basis | Approved by | Date | Notes |
+|----|-----|-------|-------|-------------|------|-------|
+| CFG-001 | (parameter key — e.g. date-format, currency, spend-threshold) | (value) | harness default / override: D-nnn (user, date) | — | | |
+
+Single source of business parameters; docs reference keys symbolically ({{spend-threshold}}).
+Canonical keys: `harness/lib/defaults.md`. Overrides need **[U]** + logged decision. IDs: `CFG-nnn`.
+
 ## registers/README.md (in the business repo)
 
 Keep it to this: the map of what lives where and the parsing rules pointer. When a register

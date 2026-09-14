@@ -74,5 +74,7 @@ without verifying the executor's evidence.
 | Two registers disagree | Deciding which is right is a `D-nnn`; fix the loser; log it |
 | Session interrupted | Rollup on return states where things stand; the last commit is the recovery point |
 | User says "just do it" on a one-way door | Confirm scope in one line, record the decision, proceed — but only after the record exists |
+| A purchase exceeds `{{spend-threshold}}` | Stop; it's a one-way door — [U] before spending (config key in `registers/config.md`) |
+| A task's natural owner doesn't exist yet | Check `registers/roles.md`: system roles cover solo operation; if the work needs a business role, propose it (the standing rule: propose separation early) and wait for [U] before assigning |
 | Regulated industry detected at intake | Pull the regulated playbook rows early; legal tasks get professionals and real due dates |
 | Founder is a non-resident / multi-region | Jurisdiction rows in compliance register get extra care at P2; one region = primary, others = tasks |

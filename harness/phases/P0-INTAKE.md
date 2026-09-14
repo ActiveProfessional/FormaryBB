@@ -41,6 +41,10 @@ is derived in later phases. Missing items become questions, never assumptions.
    - `assumptions.md` — your working assumptions + every floor extrapolation, each kill-testable
    - `risks.md` — the obvious ones; the real risk pass is P1
    - `tasks.md` — only P1 research tasks belong here so far; floor extrapolation kill-tests come first
+   - `roles.md` — system roles are seeded by `init`; propose business-role separation early, but
+     formalize only with [U] (a sole proprietor runs on system roles alone)
+   - `config.md` — seeded with harness defaults (date-format, currency, spend-threshold);
+     confirm or override with [U]; this file is the business's single parameter source
 6. **Write the P1 research plan** into `scratch/p1-research-plan.md` and convert its items
    to tasks (`T-P1-nnn`) — it answers: what must we learn to test this idea, and how, cheaply?
    Floor extrapolations lead the list.

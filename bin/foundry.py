@@ -19,7 +19,25 @@ from pathlib import Path
 HARNESS_ROOT = Path(__file__).resolve().parent.parent
 BIZ_ROOT = HARNESS_ROOT / "businesses"
 TEMPLATES = HARNESS_ROOT / "harness" / "templates"
-TODAY = datetime.date.today().isoformat()
+TODAY = datetime.date.today().isoformat()          # machine form (YYYY-MM-DD), internal only
+TODAY_WRITTEN = None  # set per business from config date-format at runtime
+
+def _fmt_date(iso: str) -> str:
+    """Render an ISO date in the business's configured written format."""
+    b = Path(_slug_cache) if _slug_cache and Path(_slug_cache).is_dir() else (BIZ_ROOT / _slug_cache if _slug_cache else None)
+    cfg = read(b / "registers" / "config.md") if b else ""
+    fmt = "MM-DD-YYYY"
+    m = re.search(r"\| CFG-\d{3} \| date-format \| ([A-Z-]+) \|", cfg) if cfg else None
+    if m:
+        fmt = m.group(1)
+    d = datetime.date.fromisoformat(iso)
+    if fmt == "MM-DD-YYYY":
+        return f"{d.month:02d}-{d.day:02d}-{d.year}"
+    if fmt == "DD-MM-YYYY":
+        return f"{d.day:02d}-{d.month:02d}-{d.year}"
+    return iso  # YYYY-MM-DD default
+
+_slug_cache = None  # last slug resolved by biz_dir; lets _fmt_date find the config cheaply
 
 GATE_ORDER = ["P0", "P1", "P2", "P3", "P4", "P5", "P7"]  # P6 never gates
 
@@ -33,6 +51,8 @@ def fail(msg):
     sys.exit(1)
 
 def biz_dir(slug: str) -> Path:
+    global _slug_cache
+    _slug_cache = slug
     p = Path(slug)
     if p.is_dir():  # allow running against any path (e.g. examples/<biz> or a moved repo)
         return p
@@ -81,6 +101,17 @@ def parse_table_lines(lines: list[str]) -> tuple[list[str], list[list[str]]]:
 def dicts(path: Path) -> list[dict]:
     header, data = parse_table(path)
     return [dict(zip(header, row)) for row in data]
+
+def _norm_due(d):
+    """Normalize a written due date (MM-DD-YYYY default, ISO accepted) to ISO for comparison."""
+    d = (d or "").strip()
+    m = re.fullmatch(r"(\d{2})-(\d{2})-(\d{4})", d)
+    if m:  # written form MM-DD-YYYY per harness default
+        return f"{m.group(3)}-{m.group(1)}-{m.group(2)}"
+    m = re.fullmatch(r"(\d{4})-(\d{2})-(\d{2})", d)
+    if m:
+        return d
+    return "9999-99-99"
 
 def reg(b: Path, name: str) -> list[dict]:
     return dicts(b / "registers" / f"{name}.md")
@@ -148,8 +179,9 @@ def cmd_init(args):
 
     profile = t("business-profile.md")
     profile = profile.replace("<Name>", args.name)
+    TODAY_W = f"{datetime.date.today().month:02d}-{datetime.date.today().day:02d}-{datetime.date.today().year}"
     fm = ("---\n"
-          f"business: {slug}\nphase: P0\ntype: document\nstatus: draft\nupdated: {TODAY}\n---\n\n")
+          f"business: {slug}\nphase: P0\ntype: document\nstatus: draft\nupdated: {TODAY_W}\n---\n\n")
     dest.mkdir(parents=True)
 
     # plan + legal + future + gates dirs with .gitkeep
@@ -159,7 +191,7 @@ def cmd_init(args):
         (dest / sub / ".gitkeep").touch()
 
     # profile (front matter with slug, region, type)
-    prof_fm = (f"---\nbusiness: {slug}\nphase: P0\ntype: document\nstatus: draft\nupdated: {TODAY}\n"
+    prof_fm = (f"---\nbusiness: {slug}\nphase: P0\ntype: document\nstatus: draft\nupdated: {TODAY_W}\n"
                f"slug: {slug}\nname: {args.name}\nregion: {args.region or ''}\n"
                f"btype: {args.type or ''}\n---\n\n")
     body = re.sub(r"^---\n.*?\n---\n\n", "", profile, count=1, flags=re.S)
@@ -195,7 +227,7 @@ def cmd_init(args):
                                     encoding="utf-8")
 
     # registers — each register file gets ONLY its own section from the template
-    names = ["tasks", "questions", "decisions", "business-facts", "assumptions", "risks", "compliance", "flex"]
+    names = ["tasks", "questions", "decisions", "business-facts", "assumptions", "risks", "compliance", "flex", "roles", "config"]
     regs = t("registers.md")
     sections, cur = {}, None
     for line in regs.splitlines():
@@ -213,12 +245,25 @@ def cmd_init(args):
         body = "\n".join(sections.get(n, [])).strip("\n")
         # strip example rows so real registers start clean (tasks/questions seeds stay)
         body = "\n".join(l for l in body.splitlines()
-                       if not re.match(r"^\| (D-001|F-001|A-001|R-001|C-001|FM-001) \|", l))
+                       if not re.match(r"^\| (D-001|F-001|A-001|R-001|C-001|FM-001|RL-001|CFG-001) \|", l))
         if n == "flex" and not body:
             body = ("| ID | Module | Trigger / context | Anchor | Status | Owner | Approved by | Date |\n"
                     "|----|--------|-------------------|--------|--------|-------|-------------|------|\n")
+        if n == "roles" and not body:
+            body = ("| ID | Role | Type | Assignee | Scope | Status | Approved by | Date |\n"
+                    "|----|------|------|----------|-------|--------|-------------|------|\n"
+                    "| RL-001 | founder | system | (the user) | owns the business; default owner of all tasks | active | system default | |\n"
+                    "| RL-002 | orchestrator | system | (frontier model) | runs sessions, gates, proposals, user-facing work | active | system default | |\n"
+                    "| RL-003 | agent | system | (machine executors) | scoped work orders only | active | system default | |\n"
+                    "| RL-004 | professional | system | (per engagement) | licensed verification: legal, tax, insurance | active | system default | |\n")
+        if n == "config" and not body:
+            body = ("| ID | Key | Value | Basis | Approved by | Date | Notes |\n"
+                    "|----|-----|-------|-------|-------------|------|-------|\n"
+                    "| CFG-001 | date-format | MM-DD-YYYY | harness default | - | | written dates; CLI normalizes for comparison |\n"
+                    "| CFG-002 | currency | USD | harness default | - | | ISO 4217; financial docs |\n"
+                    "| CFG-003 | spend-threshold | 250 | harness default | - | | purchases above this need [U]; in {{currency}} |\n")
         (dest / "registers" / f"{n}.md").write_text(
-            f"---\nbusiness: {slug}\ntype: register\nupdated: {TODAY}\n---\n\n" +
+            f"---\nbusiness: {slug}\ntype: register\nupdated: {TODAY_W}\n---\n\n" +
             f"# {n.replace('-', ' ').title()} — {args.name}\n\n" + body + "\n", encoding="utf-8")
     (dest / "registers" / "README.md").write_text(
         f"---\nbusiness: {slug}\ntype: register\nupdated: {TODAY}\n---\n\n" +
@@ -329,7 +374,7 @@ def cmd_gate(args):
     rec.write_text(
         f"---\nbusiness: {args.slug}\ntype: gate\nupdated: {TODAY}\n---\n\n"
         f"# {args.phase} Gate Record\n\n"
-        f"- verdict: {verdict}\n- date: {TODAY}\n- recorded by: {args.by}\n"
+        f"- verdict: {verdict}\n- date: {_fmt_date(TODAY)}\n- recorded by: {args.by}\n"
         f"- notes: {args.notes or '(none)'}\n"
         + ("- conditions: carried as tracked tasks — see registers/tasks.md\n" if verdict == "CONDITIONAL" else "")
         + ("- [U] user approval: " + (args.user_approval or "not recorded — REQUIRED for gates marked [U]") + "\n"
@@ -348,8 +393,14 @@ def cmd_task(args):
     tpath = b / "registers" / "tasks.md"
     if args.action == "add":
         tid = args.id or task_id_for_phase(b, args.phase)
+        due = args.due or ""
+        if due:
+            try:
+                due = _fmt_date(datetime.date.fromisoformat(due).isoformat())
+            except ValueError:
+                pass  # accept as-given; comparisons normalize
         append_table_row(tpath, [tid, args.task, args.horizon, args.phase, "TODO",
-                                  args.owner or "", args.due or "", args.done_when or ""])
+                                  args.owner or "", due, args.done_when or ""])
         print(f"added {tid}")
         if args.due:
             print(f"remind: create calendar event [{args.slug.upper()}] {args.task} (due {args.due}; 1440-min reminder if legal/financial)")
@@ -462,7 +513,7 @@ def cmd_validate(args):
     for f in req:
         if not (b / f).exists():
             problems.append(f"missing required file: {f}")
-    for n in ["tasks", "questions", "decisions", "business-facts", "assumptions", "risks", "compliance", "flex"]:
+    for n in ["tasks", "questions", "decisions", "business-facts", "assumptions", "risks", "compliance", "flex", "roles", "config"]:
         if not (b / "registers" / f"{n}.md").exists():
             problems.append(f"missing register: registers/{n}.md")
     # flex module integrity: valid anchor + user activation, core phases untouched
@@ -509,6 +560,23 @@ def cmd_validate(args):
             if disp == "unknown-by-choice" and not re.search(r"Q-\d{3}", ev):
                 problems.append(f"intake floor field {r[0]}: unknown-by-choice without a Q-nnn citation")
 
+    # config integrity: required keys present; overrides cite decisions; ISO currency
+    ch, cd_ = parse_table(b / "registers" / "config.md")
+    if ch and "key" in ch:
+        cfg = {dict(zip(ch, r)).get("key", ""): dict(zip(ch, r)) for r in cd_}
+        for req in ("date-format", "currency", "spend-threshold"):
+            if req not in cfg:
+                problems.append(f"config.md: required key '{req}' missing")
+        cur = cfg.get("currency", {}).get("value", "")
+        if cur and not re.fullmatch(r"[A-Z]{3}", cur):
+            problems.append(f"config.md: currency '{cur}' is not an ISO 4217 code")
+        for key, row in cfg.items():
+            basis = row.get("basis", "")
+            if basis.startswith("override") and not re.search(r"D-\d{3}", basis):
+                problems.append(f"config.md: {key} override without logged decision")
+            if key == "date-format" and row.get("value", "") not in ("MM-DD-YYYY", "DD-MM-YYYY", "YYYY-MM-DD"):
+                problems.append(f"config.md: unsupported date-format '{row.get('value')}'")
+
     tasks = reg(b, "tasks")
     header, data = parse_table(b / "registers" / "tasks.md")
     if "id" not in header:
@@ -521,7 +589,7 @@ def cmd_validate(args):
             row = dict(zip(header, r))
             if row.get("status") == "DONE" and not row.get("done when", "").strip():
                 problems.append(f"{row.get('id')}: DONE without done-when evidence")
-            if row.get("status") == "TODO" and row.get("due") and row.get("due") < TODAY and args.strict:
+            if row.get("status") == "TODO" and row.get("due") and _norm_due(row.get("due")) < TODAY and args.strict:
                 problems.append(f"{row.get('id')}: overdue")
     qs = reg(b, "questions")
     qh, qd = parse_table(b / "registers" / "questions.md")
@@ -585,7 +653,8 @@ def cmd_rollup(args):
         stats[t.get("status", "?")] = stats.get(t.get("status", "?"), 0) + 1
     open_q = [q for q in qs if q.get("status", "").startswith("OPEN")]
     blocking = [q for q in open_q if q.get("block", "")]
-    overdue = [t for t in tasks if t.get("status") in ("TODO", "DOING") and t.get("due", "") and t["due"] < TODAY]
+    TODAY_ISO = datetime.date.today().isoformat()
+    overdue = [t for t in tasks if t.get("status") in ("TODO", "DOING") and t.get("due", "") and _norm_due(t["due"]) < TODAY_ISO]
     doing = [t for t in tasks if t.get("status") == "DOING"]
     todo = [t for t in tasks if t.get("status") == "TODO"]
     top_risks = [r for r in risks if r.get("status") == "OPEN"][:3]
