@@ -30,7 +30,12 @@ A stranger should be able to execute this business from the paper.
 8. **Localized & personalized details** (» for local/niche types): region specifics (laws,
    geography, market quirks), community connections, founder story and personal constraints,
    named relationships and assets.
-9. `validate` → walk the master plan past the user → **G3 [U]** → announce P4/P5.
+9. **Reconciliation pass (if P4 ran in parallel)** — cross-check both ways: every tool the
+   plan's ops/GTM/team sections rely on exists in the tech plan's decisions, and every tech
+   decision that costs money or shapes operations is reflected here and in the financials.
+   Discrepancies → `D-nnn` and fixed before G3. (If P4 hasn't started, note that and move on
+   — the same check happens at G4.)
+10. `validate` → walk the master plan past the user → **G3 [U]** → announce P4/P5.
 
 ## Writing rules
 
@@ -52,6 +57,8 @@ follow-mechanics section exists with dated review checkpoints; user approved; G3
 - The plan reads like a pitch deck — it's an operating document.
 - No follow-mechanics (a plan nobody checks is a wish).
 - Perfectionism: this plan is amended quarterly; make it good enough to operate, not to frame.
+- Parallel drift: if P4 ran alongside, letting the plan name tools the tech plan rejected (or
+  vice versa) — the reconciliation pass exists to catch exactly this.
 
 ## Gate criteria (G3)
 

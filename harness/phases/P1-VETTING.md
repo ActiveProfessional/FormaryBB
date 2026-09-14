@@ -23,9 +23,20 @@ Evidence over enthusiasm.
 6. **» Founder fit** — skills/assets/relationships against the requirements, honest: the user's
    NM field-force internship is the kind of asset that gets recorded here (domain knowledge, relationships).
 7. **Kill-tests** — each `A-nnn` gets its test written and run; results logged as fact rows.
-8. **Verdict draft** → decision register: GO / PIVOT (what changes) / KILL (why) / HOLD
-   (re-test trigger + date). Walk it past the user.
-9. `validate` → **G1** → announce P2 (or archive if KILL).
+8. **Verdict draft** → decision register: GO / PIVOT (what changes) / HOLD (re-test trigger
+   + date). If kill-tests point to **KILL — stop**: a draft KILL triggers the **pivot scan first**
+   (below). We exhaust the variables before we abandon the idea.
+9. **Pivot scan (mandatory before confirmed KILL)** → `docs/business-plan/pivot-scan.md`
+   (template): re-examine each root variable (customer, geography, offering, channel, pricing,
+   season, capability, scale); list pivot options with cheap feasibility kill-tests; share with
+   the user **[U]**. Accepted pivot → profile amended (D-nnn), failed tests re-run, verdict
+   continues as PIVOT → GO. All rejected or exhausted → KILL confirmed with the scan attached.
+10. Walk the verdict past the user.
+11. `validate` → **G1** → announce P2 (or archive if KILL confirmed).
+
+**KILL rule:** kill the variables before the idea. Only the user can reject pivot options —
+deal-breaker resource facts ("I only have a push mower, no tractor") are valid and final,
+and get recorded verbatim in the scan's user-response section.
 
 ## Research discipline
 
@@ -51,8 +62,11 @@ written; G1 recorded.
 - Treating secondary blogs as `verified`.
 - Skipping the do-nothing competitor.
 - Verdict by user default ("we started so let's continue") — the verdict needs evidence either way.
+- **Quitting on the first KILL without a pivot scan** — the tractor-and-plow rule: a failed test
+  in one variable is a prompt to change variables, not necessarily to abandon the idea.
 
 ## Gate criteria (G1)
 
 Customer evidence ≥ playbook minimum per segment; kill-tested assumptions; verdict decision
-recorded; **[U]** verdict shared with the user before P2 begins.
+recorded; **any draft KILL carries a pivot scan** (options tested, user response on record)
+before confirmation; **[U]** verdict shared with the user before P2 begins.

@@ -41,8 +41,11 @@ only place a verdict lives.
 - Every assumption underpinning the verdict has an `A-nnn` with a kill-test attached.
 - Verdict recorded in a decision (`D-nnn`): **GO / PIVOT / KILL / HOLD**, dated, with reasoning.
   PIVOT must state what changes; HOLD must state the re-test trigger and date.
-- **[U]** Verdict shared with the user for approval before P2 starts. KILL requires no argument;
-  the archive is the argument.
+- **Pivot-first rule:** a draft KILL is not confirmable until a pivot scan exists
+  (`docs/business-plan/pivot-scan.md`), its options are cheap-tested, and the user has
+  accepted/rejected them **[U]** on record. KILL requires exhausted or user-rejected pivots.
+- **[U]** Verdict shared with the user for approval before P2 starts. KILL requires no further
+  argument once pivots are exhausted — the archive plus the scan is the argument.
 
 ### G2 — Foundation gate
 - **» Entity:** a professional-verified recommendation exists (lawyer/accountant/registered
@@ -62,6 +65,9 @@ only place a verdict lives.
 - **Followability check:** the plan's operating cadence names who does what and when — the
   "how to ensure the plan is followed" requirement. Include a plan-review task with a date.
 - Local personal details present where the type playbook demands (»).
+- **Reconciliation (if P3/P4 ran in parallel):** plan-tech dependencies both directions are
+  resolved — every tool the plan names is in the tech plan's decisions, every tech decision
+  the plan relies on is reflected in the plan's ops/financials. Discrepancies are `D-nnn`s, fixed pre-gate.
 - **[U]** User reads and approves the master plan.
 
 ### G4 — Tech & infrastructure gate
@@ -72,6 +78,9 @@ only place a verdict lives.
 - Security baseline specified even for zero-data businesses (password manager, MFA on
   everything, off-repo secrets).
 - Total run-rate cost sourced or estimated, and included in financials.
+- **Reconciliation (if P3/P4 ran in parallel):** both directions confirmed — tech costs in
+  the financial plan, plan sections referencing the stack (ops, GTM, team) consistent with
+  the decisions here. G3's reconciliation findings are re-checked, not re-argued.
 
 ### G5 — Execution-plan gate
 - Every task has an owner and a due date. No orphan TODOs outside the register.

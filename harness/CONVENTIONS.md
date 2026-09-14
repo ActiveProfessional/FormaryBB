@@ -29,13 +29,35 @@ Required keys: `business`, `updated`. Registers also carry `type: register`.
 | Fact | `F-nnn` | `F-021` | `registers/business-facts.md` |
 | Assumption | `A-nnn` | `A-002` | `registers/assumptions.md` |
 | Compliance item | `C-nnn` | `C-011` | `registers/compliance.md` |
+| Flex module | `FM-nnn` | `FM-002` | `registers/flex.md` |
 | Gate | `Pn-GATE` | `P2-GATE` | `gates/Pn-record.md` |
 | Work order | `WO-nnn` | `WO-041` | `scratch/` (disposable evidence) |
 | Proposal | `PROP-n` | `PROP-2` | `docs/future/proposal-vN.md` |
+| Pivot option | `PV-n` | `PV-3` | `docs/business-plan/pivot-scan.md` |
 
 - `nnn` = sequence within the register, zero-padded, **never reused**.
 - Task IDs embed their phase (`T-P2-...`) but a task may be worked in a later phase; the ID never changes.
 - IDs are the only acceptable way to reference register items in docs ("see F-021", not "see the fact about pricing").
+
+## Plain-name glossary
+
+Phase codes exist for token economy and machine parsing. Their plain names live in the
+`PHASES.md` glossary and here, so no reader — human or model — ever has to guess:
+
+| Code | Plain name | One-liner |
+|---|---|---|
+| P0 | Intake | capture the idea and the founder faithfully |
+| P1 | Vetting | try to kill it cheaply; pivot-scan before any KILL |
+| P2 | Foundation | entity, name, money, risk — the legal/financial base |
+| P3 | Business plan | the operating document |
+| P4 | Tech & infra | the stack that runs it |
+| P5 | Execution plan | dated tasks and the launch |
+| P6 | Future | proposals and expansion |
+| P7 | Operate | run, measure, amend — the rhythm |
+| G0–G5 | Gates | quality checks between phases (PASS/CONDITIONAL/FAIL) |
+| [U] | User approval required | one-way doors and verdicts |
+| » / ~ | Deep / stub | playbook depth markers, always with logged reasons for stubs |
+| FM | Flex module | business-specific chain extension, user-activated only |
 
 ## Statuses
 

@@ -184,7 +184,7 @@ def cmd_init(args):
                                     encoding="utf-8")
 
     # registers — each register file gets ONLY its own section from the template
-    names = ["tasks", "questions", "decisions", "business-facts", "assumptions", "risks", "compliance"]
+    names = ["tasks", "questions", "decisions", "business-facts", "assumptions", "risks", "compliance", "flex"]
     regs = t("registers.md")
     sections, cur = {}, None
     for line in regs.splitlines():
@@ -202,7 +202,10 @@ def cmd_init(args):
         body = "\n".join(sections.get(n, [])).strip("\n")
         # strip example rows so real registers start clean (tasks/questions seeds stay)
         body = "\n".join(l for l in body.splitlines()
-                       if not re.match(r"^\| (D-001|F-001|A-001|R-001|C-001) \|", l))
+                       if not re.match(r"^\| (D-001|F-001|A-001|R-001|C-001|FM-001) \|", l))
+        if n == "flex" and not body:
+            body = ("| ID | Module | Trigger / context | Anchor | Status | Owner | Approved by | Date |\n"
+                    "|----|--------|-------------------|--------|--------|-------|-------------|------|\n")
         (dest / "registers" / f"{n}.md").write_text(
             f"---\nbusiness: {slug}\ntype: register\nupdated: {TODAY}\n---\n\n" +
             f"# {n.replace('-', ' ').title()} — {args.name}\n\n" + body + "\n", encoding="utf-8")
@@ -448,9 +451,22 @@ def cmd_validate(args):
     for f in req:
         if not (b / f).exists():
             problems.append(f"missing required file: {f}")
-    for n in ["tasks", "questions", "decisions", "business-facts", "assumptions", "risks", "compliance"]:
+    for n in ["tasks", "questions", "decisions", "business-facts", "assumptions", "risks", "compliance", "flex"]:
         if not (b / "registers" / f"{n}.md").exists():
             problems.append(f"missing register: registers/{n}.md")
+    # flex module integrity: valid anchor + user activation, core phases untouched
+    VALID_ANCHORS = {"P1-pivot", "P2", "P3P4-parallel", "pre-P5", "P7-recurring", "P6-driven"}
+    fh, fd = parse_table(b / "registers" / "flex.md")
+    if fh and "id" in fh:
+        for r in fd:
+            row = dict(zip(fh, r))
+            st = row.get("status", "")
+            if st == "active" and not (row.get("approved by") or "").strip():
+                problems.append(f"{row.get('id')}: flex module active without user approval recorded")
+            anc = row.get("anchor", "")
+            if st in ("active", "proposed") and anc and anc not in VALID_ANCHORS:
+                problems.append(f"{row.get('id')}: flex module anchor '{anc}' invalid (use {sorted(VALID_ANCHORS)})")
+
     tasks = reg(b, "tasks")
     header, data = parse_table(b / "registers" / "tasks.md")
     if "id" not in header:

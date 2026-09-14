@@ -30,7 +30,10 @@ default preference for an **internal team structure and open-source AI tooling**
    concrete first automation, sized ≤ a week to build in langflow, becomes a P5 task.
 7. **Procurement tasks** → `registers/tasks.md` (`T-P4-nnn`): accounts to create, domains,
    hardware, software purchases **[U]** for spend above threshold.
-8. `validate` → **G4** → announce P5.
+8. **Reconciliation pass (if P3 ran in parallel)** — confirm both directions: tech run-rate is
+   in the financial plan; plan sections referencing the stack (ops, GTM, team) match these
+   decisions. Re-check anything G3's reconciliation flagged, don't re-argue it.
+9. `validate` → **G4** → announce P5.
 
 ## Decision hygiene
 

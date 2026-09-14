@@ -57,6 +57,14 @@ P = probability, I = impact. Statuses: OPEN / MITIGATED / HAPPENED → (decision
 
 Statuses: TODO / DOING / DONE → (evidence) / N/A → (why). Deadlines get `[SLUG]` calendar events.
 
+## flex.md
+| ID | Module | Trigger / context | Anchor | Status | Owner | Approved by | Date |
+|----|--------|-------------------|--------|--------|-------|-------------|------|
+| FM-001 | (business-specific expansion — e.g. fundraise, licensing gauntlet, seasonal ramp, content engine) | (what surfaced it) | (one of: P1-pivot / P2 / P3P4-parallel / pre-P5 / P7-recurring / P6-driven) | proposed | | (awaiting [U]) | |
+
+Flex modules extend the core chain without altering it. Models may propose; only the user
+activates **[U]**. Anchors say where the module slots in. See `harness/PHASES.md` "Flex modules".
+
 ## registers/README.md (in the business repo)
 
 Keep it to this: the map of what lives where and the parsing rules pointer. When a register

@@ -67,7 +67,9 @@ without verifying the executor's evidence.
 | Situation | Response |
 |---|---|
 | User brings a new idea mid-session | Capture it in the relevant doc/register with a date; if it's a strategic change, a P6 proposal draft |
-| Business idea proves flawed | Record evidence, G1 verdict KILL/HOLD/PIVOT, archive repo (never delete) |
+| Business idea proves flawed | Record evidence, draft the G1 KILL **only after the pivot scan** — change the variables (offering, geography, customer, season, channel) before abandoning the idea; walk options past the user; KILL is confirmed when pivots are exhausted or user-rejected on record |
+| A phase-gap appears the chain doesn't cover | Propose a flex module (FM-nnn) in `registers/flex.md` with anchor + trigger; **[U]** activates it — core phases stay immutable |
+| Flex module proposed | Share compactly: what, why now, anchor, effort; never activate without the user's approval — `validate` enforces this |
 | Executor output looks wrong | Verify against source; if wrong, orchestrator fixes and notes the pattern in the work order reply |
 | Two registers disagree | Deciding which is right is a `D-nnn`; fix the loser; log it |
 | Session interrupted | Rollup on return states where things stand; the last commit is the recovery point |
