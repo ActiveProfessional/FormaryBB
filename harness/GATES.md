@@ -29,11 +29,16 @@ only place a verdict lives.
 ## The gates
 
 ### G0 — Intake gate
+- **» Intake floor complete:** all six floor fields (offering, locale, customer, founder
+  capacity, competitive awareness, type hint) carry dispositions; offering is `captured`;
+  every `extrapolated` row cites an `A-nnn` whose kill-test is a P1 task; every
+  `unknown-by-choice` row cites a `Q-nnn`. `validate` enforces this mechanically.
 - Profile complete enough to act on: nature, mission intent, region, and at least the
   founder-relevant personal facts. Remaining gaps live in `questions.md`, each with a Block flag.
 - Every profile fact that can be wrong has a matching verification question or task.
-- P1 research plan written. The user has seen the profile and confirmed it reflects the idea.
-- **[U]** User must confirm: "this is what I mean."
+- P1 research plan written with floor extrapolation kill-tests first. The user has seen the
+  profile **including every extrapolated row** and confirmed it reflects the idea.
+- **[U]** User must confirm: "this is what I mean" — extrapolations included.
 
 ### G1 — Vetting gate
 - **» Market evidence:** at least one primary (or primary-substitute) customer-evidence row

@@ -67,6 +67,17 @@ def parse_table(path: Path) -> tuple[list[str], list[list[str]]]:
     data = [x for x in r[1:] if len(x) == len(header)]
     return header, data
 
+def parse_table_lines(lines: list[str]) -> tuple[list[str], list[list[str]]]:
+    """Parse a markdown table from pre-extracted lines (for section-scoped tables)."""
+    r = [ [c.strip() for c in l.strip().strip("|").split("|")]
+          for l in lines if l.strip().startswith("|") ]
+    r = [x for x in r if not all(re.fullmatch(r":?-{3,}:?", c) for c in x if c)]
+    if not r:
+        return [], []
+    header = [h.lower() for h in r[0]]
+    data = [x for x in r[1:] if len(x) == len(header)]
+    return header, data
+
 def dicts(path: Path) -> list[dict]:
     header, data = parse_table(path)
     return [dict(zip(header, row)) for row in data]
@@ -466,6 +477,37 @@ def cmd_validate(args):
             anc = row.get("anchor", "")
             if st in ("active", "proposed") and anc and anc not in VALID_ANCHORS:
                 problems.append(f"{row.get('id')}: flex module anchor '{anc}' invalid (use {sorted(VALID_ANCHORS)})")
+
+    # intake floor: all six fields dispositioned; extrapolations cite A-nnns; offering captured
+    if (b / "business-profile.md").exists():
+        # scope parsing to the "## Intake floor" section (profile has other tables above it)
+        prof_lines = read(b / "business-profile.md").splitlines()
+        floor_lines, in_floor = [], False
+        for line in prof_lines:
+            if line.startswith("## "):
+                in_floor = line.startswith("## Intake floor")
+                continue
+            if in_floor:
+                floor_lines.append(line)
+        fh2, fd2 = parse_table_lines(floor_lines)
+        floor_rows = [r for r in fd2 if r and len(r) >= 2
+                      and r[0] in ("1", "2", "3", "4", "5", "6")
+                      and r[1].startswith(("Offering", "Locale", "Expected customer",
+                                           "Founder capacity", "Competitive", "Business-type"))]
+        if len(floor_rows) < 6:
+            problems.append(f"intake floor incomplete: {len(floor_rows)}/6 fields dispositioned")
+        FLOOR_OK = {"captured", "extrapolated", "unknown-by-choice"}
+        for r in floor_rows:
+            disp = r[2] if len(r) > 2 else ""
+            if disp not in FLOOR_OK:
+                problems.append(f"intake floor field {r[0]}: invalid/missing disposition '{disp}'")
+            if r[1].startswith("Offering") and disp != "captured":
+                problems.append(f"intake floor field 1 (Offering): must be 'captured', got '{disp}'")
+            ev = r[4] if len(r) > 4 else ""
+            if disp == "extrapolated" and not re.search(r"A-\d{3}", ev):
+                problems.append(f"intake floor field {r[0]}: extrapolated without an A-nnn citation")
+            if disp == "unknown-by-choice" and not re.search(r"Q-\d{3}", ev):
+                problems.append(f"intake floor field {r[0]}: unknown-by-choice without a Q-nnn citation")
 
     tasks = reg(b, "tasks")
     header, data = parse_table(b / "registers" / "tasks.md")

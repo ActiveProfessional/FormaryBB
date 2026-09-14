@@ -60,3 +60,32 @@ What would make the founder stop. (Asked, not assumed.)
 ## Open questions seeded
 
 See `registers/questions.md` — every gap found while writing this profile has a Q-nnn there.
+
+## Intake floor
+
+**The prerequisite floor for vetting.** Each of the six floor fields must carry a disposition
+before G0 can pass. Ask everything, gate only on the floor: prompt comprehensively, gate minimally.
+
+| # | Floor field | Disposition | Value / summary | Evidence |
+|---|---|---|---|---|
+| 1 | Offering (what is sold) | | | |
+| 2 | Locale / market region | | | |
+| 3 | Expected customer | | | |
+| 4 | Founder capacity (time / capital / skills) | | | |
+| 5 | Competitive awareness | | | |
+| 6 | Business-type hint | | | |
+
+**Dispositions** (exact words; `validate` enforces):
+
+- `captured` — the user provided it. Value required; becomes a fact row (source: founder).
+- `extrapolated` — the user doesn't have it; the model proposes its best contextual judgment.
+  Must cite an `A-nnn` in Evidence whose kill-test is **first in the P1 research plan** — the
+  extrapolation is the first thing vetting tests, not a silent guess. User sees every
+  extrapolation at the [U] walk-through and approves or corrects it.
+- `unknown-by-choice` — the user confirmed they don't know and extrapolation isn't meaningful
+  (e.g. competitive data is P1's job). Must cite a `Q-nnn`; non-blocking.
+
+**Floor rule 1:** the Offering (field 1) can only be `captured`. If the requester cannot
+articulate the idea even with help, it isn't ready for vetting yet — help them shape it first.
+**Floor rule 2:** fields 2–6 may be extrapolated freely — a one-line idea passes the floor with
+five extrapolations; a detailed brief passes with everything captured. Both are G0-valid.

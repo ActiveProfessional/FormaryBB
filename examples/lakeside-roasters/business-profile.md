@@ -1,5 +1,5 @@
 ---
-business: examples/lakeside-roasters
+business: lakeside-roasters
 phase: P0
 type: document
 status: approved
@@ -81,3 +81,32 @@ hobby roasting. (Founder's words, recorded 2026-09-14.)
 
 See `registers/questions.md` — Q-001 placeholder to be replaced by the real intake
 questions; Q-002 answered (shared commercial kitchen rental confirmed).
+
+## Intake floor
+
+**The prerequisite floor for vetting.** Each of the six floor fields must carry a disposition
+before G0 can pass. Ask everything, gate only on the floor: prompt comprehensively, gate minimally.
+
+| # | Floor field | Disposition | Value / summary | Evidence |
+|---|---|---|---|---|
+| 1 | Offering (what is sold) | captured | Small-batch roasted coffee: 12 oz bags at two farmers markets + weekly local subscription | F-001, F-004 (founder, 2026-09-14) |
+| 2 | Locale / market region | captured | Madison, WI (east side); Dane County Farmers Market + east-side market | F-001 (founder, 2026-09-14) |
+| 3 | Expected customer | captured | East-side Madison coffee drinkers: market shoppers + neighbors on a weekly subscription | F-002 (founder, 2026-09-14) |
+| 4 | Founder capacity (time / capital / skills) | captured | ~10 hrs/week; $3,000 capital; 4 yrs roasting experience | F-001, F-002, F-003 (founder, 2026-09-14) |
+| 5 | Competitive awareness | captured | Knows of 4 local roasters at retail; Starbucks as the mass alternative; no subscription rival known nearby | F-005 (founder, 2026-09-14; P1 will deepen) |
+| 6 | Business-type hint | captured | local-service, food-adjacent (roasted coffee, no café) | playbook routing confirmed at P1 |
+
+**Dispositions** (exact words; `validate` enforces):
+
+- `captured` — the user provided it. Value required; becomes a fact row (source: founder).
+- `extrapolated` — the user doesn't have it; the model proposes its best contextual judgment.
+  Must cite an `A-nnn` in Evidence whose kill-test is **first in the P1 research plan** — the
+  extrapolation is the first thing vetting tests, not a silent guess. User sees every
+  extrapolation at the [U] walk-through and approves or corrects it.
+- `unknown-by-choice` — the user confirmed they don't know and extrapolation isn't meaningful
+  (e.g. competitive data is P1's job). Must cite a `Q-nnn`; non-blocking.
+
+**Floor rule 1:** the Offering (field 1) can only be `captured`. If the requester cannot
+articulate the idea even with help, it isn't ready for vetting yet — help them shape it first.
+**Floor rule 2:** fields 2–6 may be extrapolated freely — a one-line idea passes the floor with
+five extrapolations; a detailed brief passes with everything captured. Both are G0-valid.
