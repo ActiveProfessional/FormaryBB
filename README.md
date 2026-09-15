@@ -19,7 +19,7 @@ IDEA → P0 INTAKE → [G0] → P1 VETTING → [G1] → P2 FOUNDATION → [G2] �
 Inside every phase the same loop: **BRIEF → DO → RECORD → CHECK**. A phase may not start
 until the previous gate is recorded PASS or CONDITIONAL (conditions become tracked tasks).
 
-## Quickstart
+## Quickstart (CLI hands-on)
 
 ```bash
 # 0. Point the CLI at YOUR workspace (data never lands in the core repo)
@@ -38,6 +38,53 @@ python3 bin/foundry.py validate my-biz            # automated repo health checks
 python3 bin/foundry.py rollup my-biz              # ≤600-token resume pack (--tier t3 trims to ~300)
 ```
 
+## Onboarding script — openwebui + openterminal + langflow (recommended mode)
+
+The engine is **files + a CLI + a protocol** — there is nothing to serve or build. The
+model is the motor; the chat is the control panel; the repo is the engine block. Walk a
+new user through these seven steps:
+
+```
+1. Clone FormaryBB → ~/FormaryBB  (repo is private — grant the user access)
+
+2. Create their workspace (its own git repo — data never lands in the core):
+     mkdir ~/foundry-workspace && cd ~/foundry-workspace && git init
+
+3. Set FOUNDRY_WORKSPACE=~/foundry-workspace in the environment the terminal tool
+   spawns from (every command also accepts full paths, so a missing env var can't
+   strand you — belt and suspenders)
+
+4. In openwebui, create two personas:
+     • "Foundry Orchestrator" — routed to the frontier model (T1). System prompt =
+       L0 boot text (README + PHASES + session protocol). Attach harness/ as a
+       knowledge base (RAG for phase briefs + playbooks). Enable the terminal tool.
+     • "Foundry Executor" (optional) — routed to a local model (T3), same knowledge
+       base, terminal tool on. Used only when handed a work order.
+
+5. Open a chat with the Orchestrator:
+     "Run a session for a new business — my idea is ___"
+   The persona handles everything else: init, intake interview, floor dispositions,
+   extrapolations shown for approval, gates recorded with your verbatim approval.
+   The conversation is the interface; the repo is the record.
+
+6. Approve [U] items in chat — the model records your words into the repo as the
+   evidence trail. Nothing one-way happens without you.
+
+7. Optional: wire ONE scheduled trigger (the engine is silent until spoken to):
+     • openwebui Automation: weekly prompt to the Orchestrator — "Run the weekly
+       review for all businesses in the workspace — rollup each, list overdue and
+       [U]-pending, ≤10-line report"
+     • or host cron / langflow calling the same prompt via API
+     • or a daily scanner: rollup per business → overdue / upcoming-compliance
+       lines non-empty → send the alert (email/webhook/chat)
+     Until a trigger is wired, the engine responds only when a user opens a session.
+```
+
+**Degraded mode:** a model with no tool access at all still operates the engine through
+you as the relay — paste the rollup in, it tells you the next command, you paste the
+output back. The harness works in the barest chat environment and upgrades gracefully:
+relay → tool-access model → scheduled rituals → alerting → hosted app.
+
 Then follow `harness/phases/P0-INTAKE.md`. The business repo (not this harness) is the
 source of truth for that business. Every command also accepts a path instead of a slug —
 that's how the frozen demo in `examples/lakeside-roasters/` stays addressable
@@ -46,6 +93,30 @@ not the core repo — `WORKSPACES.md` explains the three-layer model (core / wor
 overlay) and why core stays clean.
 
 **License:** MIT — see `LICENSE`. **Version:** see `CHANGELOG.md` and git tags.
+
+## How execution works (the engine's operating model)
+
+FormaryBB is **not a running program** — no daemon, no server, nothing to start. It is:
+
+1. **A state machine made of files** — the business repo (registers, docs, gate records)
+   *is* the state. Nothing exists outside those files.
+2. **A CLI instrument** — `foundry.py` runs when invoked, does one thing, exits.
+3. **A protocol** — the harness docs tell any model how to turn the wrench: rollup →
+   work per phase brief → record → report.
+
+**Trigger map:** intake/phase work/gates/proposals are **pull** (user-initiated chat
+sessions). Rituals (weekly/monthly/quarterly) are **scheduled prompts** (openwebui
+Automations, host cron, or langflow calling the same prompt). Deadline/compliance alerts
+are a **scanner** (daily cron: rollup each business; non-empty overdue / upcoming lines →
+send alert). The core deliberately contains no scheduler and no alerter — alerting
+exists exactly when one of those trigger paths is wired. The upside is integrity: nothing
+mutates the repo unless a model session (or you) is actively driving.
+
+Calendar integration is environment-supplied: in tool-equipped agent environments,
+create `[SLUG]`-tagged events when tasks get due dates; vanilla openwebui has no built-in
+calendar — integrate one via a function/MCP tool, or rely on the tasks register as the
+source of truth with the scanner delivering reminders. Calendars are a convenience
+layer, never the record.
 
 ## Onboarding — how to actually run this (novice walkthrough)
 
