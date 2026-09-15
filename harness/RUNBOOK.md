@@ -30,10 +30,15 @@ without verifying the executor's evidence.
 ## Rituals
 
 ### Weekly review (orchestrator + user, ~15 min)
+- **Cadence follows activity, not the calendar:** weekly reviews run per-business while a
+  business is in launch mode or has [U] items pending; otherwise that business moves to the
+  monthly snapshot cadence. A quiet business is a healthy business — don't bill it for ceremony.
 - Overdue + next-7-days tasks (rollup), gate conditions in progress, new questions to answer.
 
 ### Monthly snapshot (orchestrator alone)
 - Update `metrics.md` (if operating) and `status.md` (what changed, what's coming).
+- **Cash-position check (standing row):** one line — cash on hand vs. plan. Pre-launch
+  businesses skip it. Cash surprises are the #1 small-business killer; the check is cheap.
 - Re-run `validate`; fix drift.
 
 ### Quarterly review (orchestrator + user)
@@ -49,6 +54,10 @@ without verifying the executor's evidence.
 ## Calendar integration
 
 - When a task gets a due date, create a tagged calendar event `[SLUG] <task text>` (see CONVENTIONS.md).
+- **Ritual events are created, not implied:** at the first weekly review for a business,
+  create its recurring events — `[SLUG] Weekly review` (or the monthly cadence per the
+  activity rule), `[SLUG] Monthly snapshot`, `[SLUG] Quarterly review` — recurring, tagged.
+  Rituals that aren't on the calendar don't happen.
 - Deadline events (legal, tax, renewal) get 1440-min reminders; meetings get 10.
 - Cancel/reschedule events when task rows change. Review the calendar weekly alongside tasks.
 - If no calendar tooling is available, the tasks register due dates are the fallback record.
@@ -78,3 +87,5 @@ without verifying the executor's evidence.
 | A task's natural owner doesn't exist yet | Check `registers/roles.md`: system roles cover solo operation; if the work needs a business role, propose it (the standing rule: propose separation early) and wait for [U] before assigning |
 | Regulated industry detected at intake | Pull the regulated playbook rows early; legal tasks get professionals and real due dates |
 | Founder is a non-resident / multi-region | Jurisdiction rows in compliance register get extra care at P2; one region = primary, others = tasks |
+| Founder goes quiet 30+ days | Flag at the monthly snapshot; after 60 days propose `parked` status [U] — no silent abandonment, no guilt; revival continues ID numbering (CONVENTIONS.md) |
+| Regulatory change mid-operation | Compliance sweep at the next monthly snapshot: affected C-nnns get new rows or amendments; material impact → P6 proposal |
