@@ -682,9 +682,24 @@ def cmd_rollup(args):
         print("top risks: " + "; ".join(fmt_row(r, ['id', 'risk']) for r in top_risks))
     if last_dec:
         print("recent decisions: " + "; ".join(fmt_row(d, ['id', 'decision']) for d in last_dec))
+    # active/proposed flex modules (Q2: a session can't act on flex work it can't see)
+    flex = reg(b, "flex")
+    live_flex = [f for f in flex if f.get("status", "") in ("active", "proposed", "approved")]
+    # config overrides in effect (Q2: non-default values only; free when none)
+    ch, cd_ = parse_table(b / "registers" / "config.md")
+    overrides = []
+    if ch and "basis" in [h.lower() for h in ch]:
+        for r in cd_:
+            row = dict(zip([h.lower() for h in ch], r))
+            if str(row.get("basis", "")).startswith("override"):
+                overrides.append(row)
     due_comp = [c for c in comp if c.get("deadline") and c["deadline"] >= TODAY and c.get("status", "") in ("", "TODO", "DOING")]
     if due_comp:
         print("upcoming compliance: " + "; ".join(fmt_row(c, ['id', 'deadline', 'item']) for c in due_comp[:3]))
+    if live_flex:
+        print("flex: " + "; ".join(fmt_row(f, ['id', 'module', 'status']) for f in live_flex[:3]))
+    if overrides:
+        print("config overrides: " + "; ".join(f"{o.get('key')}={o.get('value')} ({o.get('basis')})" for o in overrides[:3]))
 
 # ---------------------------------------------------------------- main
 

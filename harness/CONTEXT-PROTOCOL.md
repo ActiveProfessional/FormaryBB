@@ -48,7 +48,7 @@ logged decision + evidence rows, not a stack of per-row WOs.
 | Level | Content | Budget | When read |
 |---|---|---|---|
 | L0 — Boot | This repo's `README.md` + `harness/PHASES.md` | ~1.2k tokens | First session with a model (once per model) |
-| L1 — Business pack | `foundry.py rollup <slug>` output (business card, gate state, task rollups, open questions, risks, decisions) | ≤600 tokens (T3: trimmed ~300) | **Every session, first read** |
+| L1 — Business pack | `foundry.py rollup <slug>` output (business card, gate state, task rollups, open questions, risks, decisions, **active flex modules**, **config overrides in effect**) | ≤600 tokens (T3: trimmed ~300) | **Every session, first read** |
 | L2 — Section read | One phase brief, one doc section, or one register filtered view | ≤3k tokens | Only what the current item needs |
 | L3 — Full file | A whole document or register | As needed | Only when authoring/auditing that file |
 
@@ -70,6 +70,11 @@ Rules:
   tokens and keeps the local models practiced). It must not delegate: gate calls, judgments,
   user-facing proposals, anything one-way. T1 may self-execute when no executor pool exists.
 - Executors confirm: scope received → done → what changed (back-tick the exact rows).
+- **Risk-tiered verification (rule):** orchestrators **verify-all** executor output that is
+  one-way-door-adjacent — compliance rows (C-nnn), legal facts, spend figures, anything
+  feeding a [U] decision or a gate — before marking DONE. Routine output (draft blurbs,
+  non-critical rows) gets a **spot-check**. The boundary is the risk, not the executor's
+  track record.
 - When an executor's output contradicts the rollup, the orchestrator resolves it — never assume.
 
 ## Work orders (the local-model interface)
@@ -141,7 +146,10 @@ use the rollup alone.
 3. **Filter views beat full reads.** `foundry.py status/next/tasks` print only what's needed.
 4. **Trust the machine checks.** `validate` catches drift so models don't have to re-read to audit.
 5. **Small-file writes.** One doc, one session. Never "while I'm here" edits beyond the task scope.
-6. **The 10-line report.** End every session user-facing with ≤10 lines. If it needs more, it's a proposal (P6 material).
+6. **The 10-line report (uniform, including [U] sessions).** End every session user-facing
+   with ≤10 lines — gates and proposals included. The detail belongs in the gate record or the
+   proposal doc; the user gets the headline + the pointer. Uniformity is the point: if every
+   report is the same size, nothing important hides in a long one.
 7. **Templates are the token guide.** Fill the template; don't expand beyond it unless the
    phase brief's » markers say to go deep.
 8. **Tier discipline.** Know your declared tier and follow its pattern; let the done-when
