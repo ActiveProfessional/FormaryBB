@@ -25,16 +25,59 @@ source or licensed professional) before it drives action or spend.
 | Industry | FDA/USDA for food production; SEC/FINRA for financial products; state licensing boards for trades |
 | Product safety | CPSC; warning labels (e.g., CA Prop 65 for products sold into CA) |
 
-## US state-flavor examples (directional, not exhaustive)
+## US operational states (deep rows)
+
+Wisconsin, Illinois, and Indiana are the deep rows — verified operational states. Other
+states are **on-demand**: when a business will operate in one, add the state's rows as a
+compliance-seeding task (research → primary-source verification) rather than pre-filling.
+
+### Wisconsin (deep)
+
+| Category | Candidate obligations |
+|---|---|
+| Entity | LLC via DFI (Dept. of Financial Institutions); annual report online; registered agent required |
+| State tax | WI DOR: seller's permit where taxable; use tax on out-of-state purchases |
+| Local | City business registration (e.g., City of Milwaukee license; Madison public health/Madison & Dane County for food-adjacent) |
+| Employment | Unemployment insurance via DWD; workers' comp (mandatory with employees, even part-time) |
+| Industry | DATCP for food processing/cottage food; DSPS for licensed trades/health; state licensing boards |
+| Notes | Cottage-food law has specific category limits — verify product eligibility; strong farmers-market regulatory culture |
+
+### Illinois (deep)
+
+| Category | Candidate obligations |
+|---|---|
+| Entity | LLC via IL Secretary of State; **annual report + franchise tax** (LLCs: $75 report fee + $250 min franchise tax — real annual cost line) |
+| State tax | IL DOR: IDOR business registration, sales tax by locality (highest-in-nation combined rates — layer city/county/RTA) |
+| Local | City business licenses (Chicago: city license + possible ward-level permits; home-rule cities vary widely) |
+| Employment | IL Dept. of Employment Security (unemployment); workers' comp via IL Workers' Comp Commission (mandatory) |
+| Industry | IDPH for food; IDFPR for financial/professional licensing; state signage/registration varies |
+| Notes | Chicago's regulatory stack is among the heaviest municipal layers in the US — budget professional help for food/retail there |
+
+### Indiana (deep)
+
+| Category | Candidate obligations |
+|---|---|
+| Entity | LLC via IN SOS (INBiz portal — among the easiest state filing systems); registered agent required |
+| State tax | IN DOR: BT-1 registration; sales tax statewide 7% (no local add-ons — simpler than IL/WI) |
+| Local | County/city occupational licenses vary; no state-level general business license |
+| Employment | IN DWD unemployment; workers' comp mandatory with employees |
+| Industry | State Board of Health for food; professional licensing via PLA (Indiana Professional Licensing Agency) |
+| Notes | INBiz one-stop portal makes entity + tax registration fast; good state for lean launches in the operational trio |
+
+### Other states (directional only — expand on demand)
 
 | State | Flavor notes |
 |---|---|
-| Wisconsin | LLC filing via DFI; city-level business registration (e.g., Milwaukee); straightforward annual report |
 | California | Franchise tax on LLCs/Corps even at zero revenue; city business licenses; Prop 65 exposure |
 | New York | LLC publication requirement (county-level) — a real cost line; NYC licenses layered |
 | Texas | No state income tax; franchise tax thresholds; sales tax rules |
 | Florida | Sunbiz filings; sales tax; local occupational licenses |
 | Washington | B&O tax (gross receipts, not income); state L&I for employers |
+
+**On-demand expansion rule:** when a business adds a state beyond WI/IL/IN, the P2 brief
+seeds a task: "expand jurisdiction rows for <state> — research primary sources, convert to
+C-nnn candidates, verify." The map above is never the last word (see the mandatory
+verification table below).
 
 ## Other regions
 

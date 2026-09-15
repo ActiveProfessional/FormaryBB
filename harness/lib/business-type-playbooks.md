@@ -140,6 +140,24 @@ core = standard template treatment.
 - Thin everything, » incorporation + tax treatment only. Execution plan = the operating
   calendar of a few filings. Exists to serve another business — treat as a P2-only exercise.
 
+## Continuous improvement protocol (the harness upgrades itself)
+
+Playbooks compound: every real business teaches the harness something. When a business run
+reveals a gap ("my hospitality business needed a liquor-license timeline the playbook
+under-weighted"), it becomes a **playbook proposal** — same pattern as flex modules:
+
+- **Any model proposes:** new type, new rows, depth-matrix corrections, jurisdiction
+  additions, KPI adjustments — drafted as a proposal with the evidence (which business,
+  which gate, what was missing).
+- **Only the user activates [U]:** playbook changes are core-machinery changes; they alter
+  how all *future* businesses route. Approval is always the user's call.
+- **Logged in the harness's own decision register:** the FormaryBB repo carries a top-level
+  `HARNESS-DECISIONS.md` (harness-scoped D-nnn sequence, separate from any business);
+  accepted proposals cite it and update `lib/` in the next commit.
+- **Per-business tailoring is NOT the way to fix playbook gaps** — a fix that lives in one
+  business's repo helps one business; a fix in the playbook helps every future one. When you
+  find yourself copy-pasting the same customization across businesses, it's playbook material.
+
 ## Using the playbooks
 
 1. At P0, pick the closest type → paste its depth row into the profile.
@@ -148,3 +166,7 @@ core = standard template treatment.
 3. If evidence in P1 suggests a different type, record the change as a `D-nnn`.
 4. Regulated zone (fintech, health, education-minors, licensed trades): add professional
    verification tasks **before** P2 ends — no exceptions, regardless of compression elsewhere.
+5. **Late type-mismatch re-check:** if a material type mismatch surfaces after P1 (e.g., a
+   "local-service" turns out to really be ecommerce at P3), log the change (`D-nnn`), re-run
+   the depth matrix on the **affected sections only**, and re-check those sections at the
+   next gate. Nothing else re-opens; the gate re-checks what the type change touched.
