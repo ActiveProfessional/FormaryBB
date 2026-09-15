@@ -15,6 +15,12 @@ Fill every section unless your playbook marks it **~** (stub it with a one-parag
 and a pointer), and deepen every **»** section. Length is not the goal; a stranger executing
 the business from this document is.
 
+**Length guide — tier-qualified:** for T2/T3 orchestrators and editors, a soft ceiling of
+**~15 core pages** applies for most types (regulated/funded ventures exempt). **T1 frontier
+orchestrators authoring the plan in one pass are exempt from the ceiling** — the guide
+exists to keep small-model edits and incremental updates coherent, not to cap frontier
+synthesis; T3 models only ever make minor edits or updates, never regenerate the document.
+
 ## 1. Executive summary
 
 What we sell, to whom, where, why now, how money moves, year-one objective. Written **last**.
@@ -70,6 +76,14 @@ From `registers/risks.md` — link + the top 5 by expected impact, each with mit
 
 The stuff that makes this business *this* business: geography, community ties, founder
 story, named relationships, personal constraints honored by the plan.
+
+**Mandatory minimums (every plan, every type — one line each, deepen per playbook):**
+- **Founder story (one paragraph):** who is behind this and why them — the reader should
+  understand the person, not just the role.
+- **Region note (one line):** what about this place shapes the business (law, geography,
+  market, community).
+- **Personal constraints honored (one line):** the founder's real limits the plan respects
+  (hours, capital, family, day job) and where the plan bends around them.
 
 ## 14. Plan follow & amendment (required)
 

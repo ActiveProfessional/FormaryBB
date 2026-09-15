@@ -52,4 +52,14 @@ chosen (D-nnn). When does cash hit a decision point, and what's the plan at that
 ## Worst case »
 
 The honest one: launch slips 3 months, revenue at 50% of estimate — does the business
-survive? What gets cut first (already-decided priorities, ranked)?
+survive? What gets cut first?
+
+**Ranked cut list (pre-decided kill-order — turns panic into procedure):**
+
+| Rank | Cut first | What it is | Why here |
+|---|---|---|---|
+| 1 | | | |
+| 2 | | | |
+| 3 | | | |
+
+Decide the order now, at P3, when emotions are low and numbers are fresh.

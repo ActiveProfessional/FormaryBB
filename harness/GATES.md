@@ -56,9 +56,10 @@ only place a verdict lives.
   argument once pivots are exhausted — the archive plus the scan is the argument.
 
 ### G2 — Foundation gate
-- **» Entity:** a professional-verified recommendation exists (lawyer/accountant/registered
-  agent/official agency source), entity type **[U]** user-approved, and a name cleared
-  (state registry + trademark TESS check + domain availability).
+- **» Entity:** a verified recommendation exists — primary government source suffices for
+  simple cases; licensed professional required for ambiguous/regulated/multi-founder/
+  multi-jurisdiction (risk-tiered, see P2 brief) — entity type **[U]** user-approved, and a
+  name cleared (state registry + trademark TESS check + domain availability).
 - Bank, insurance, accounting, payroll are decided — may be tasks with due dates, but never open questions.
 - Funding and runway math complete, every number sourced or estimated; runway ≥ planned
   horizon-0 spend (est. acceptable).

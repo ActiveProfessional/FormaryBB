@@ -41,7 +41,7 @@ on record first. See `harness/lib/jurisdictions.md` for the jurisdiction startin
 - [ ] Ownership & equity: split, vesting, contributions — recorded as `D-nnn`
 - [ ] Licenses & permits (from `registers/compliance.md`) — each a C-nnn
 - [ ] Business bank account (which bank, why — `D-nnn`)
-- [ ] Insurance selected (types from playbook; quotes as F-nnns)
+- [ ] Insurance types specified; quotes collected with documentation into `source/` (see Insurance detail)
 - [ ] Bookkeeping method/tool + first bookkeeper setup
 - [ ] Payroll decision (EOR service / manual / not yet hiring)
 - [ ] Founders' agreement (if >1 founder) — equity, vesting, exit, roles **[U]**
@@ -50,6 +50,18 @@ on record first. See `harness/lib/jurisdictions.md` for the jurisdiction startin
 
 From `registers/compliance.md`: each C-nnn summarized here with deadline. Ongoing obligations
 (annual reports, renewals, tax dates) get calendar events at P5 — tagged `[SLUG]`.
+
+## Insurance detail
+
+Spec the **types** (from the business-type playbook) and collect quotes; amounts without a
+broker's input are guesses — but **quotes with supporting documentation are verifiable**:
+attach the quote/binder to `source/`, reference it as an F-nnn, and the number is legitimate.
+
+| Coverage type | Why needed (playbook ref) | Quote / amount | Source & date | Status |
+|---|---|---|---|---|
+| | | | | pending quote / quoted → F-nnn / bound |
+
+Bound coverage gets a C-nnn compliance row (renewal deadline → calendar) and a P5 task.
 
 ## Professional advisors
 

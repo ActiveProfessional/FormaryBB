@@ -12,8 +12,13 @@ user's request section 1: goals, mission statement, and the incorporation essent
    values only if the user provides them, and non-goals (what we will not do — the discipline list).
 2. **» Entity decision** → `docs/legal/10-incorporation.md` (template):
    - Playbook + jurisdiction hints (`harness/lib/jurisdictions.md`) produce a *recommendation draft*.
-   - **The recommendation must be verified by a professional or primary government source**
-     (task with a real due date). Entity type is **[U]** user-approved before any filing.
+   - **The recommendation must be verified before it is actionable.** Verification depth is
+     risk-tiered: **a primary government source alone satisfies it for simple cases** (e.g.
+     state filing-agency guidance for a solo LLC); **a licensed professional is required**
+     when anything is ambiguous, regulated (fintech/health/etc.), multi-founder, or
+     multi-jurisdiction. Either way the verification is a task with a real due date, and
+     compliance-adjacent rows get verify-ALL treatment (CONTEXT-PROTOCOL). Entity type is
+     **[U]** user-approved before any filing.
    - Register, member/manager structure, equity/ownership split, tax election notes, and
      what each choice means in plain language.
 3. **» Name clearance** → decision rows: state registry search, USPTO trademark search
@@ -22,7 +27,9 @@ user's request section 1: goals, mission statement, and the incorporation essent
      (est. labeled); funding sources and any financing tasks.
 5. **Banking, accounting, insurance, payroll** — each decided (tasks with due dates are fine;
    open questions are not). Include: business bank account, bookkeeping method/tool,
-   insurance types (see playbooks), payroll decision (hire or not yet).
+   insurance types per the playbook with **quotes documented into `source/`** (the
+   incorporation doc's Insurance detail section accepts documented numbers — undocumented
+   amounts remain guesses), payroll decision (hire or not yet).
 6. **» Risk & compliance seeding** — `registers/risks.md` (probability × impact × mitigation,
    including founder risk and key-person risk), `registers/compliance.md` (federal, state,
    county, city; ongoing vs. one-time; deadlines → calendar **now**, tagged `[SLUG]`).

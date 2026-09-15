@@ -43,7 +43,10 @@ A stranger should be able to execute this business from the paper.
   link `A-nnn`s. The plan narrates; registers hold data.
 - **Estimates visible:** every unverified number `est. + A-nnn`.
 - Write for the stranger-executor: no "obviously", no "as discussed".
-- Length follows the playbook: a lean plan is a pass, an inflated one is a failure mode.
+- Length follows the playbook: a lean plan is a pass, an inflated one is a failure mode. The
+  template's tier-qualified guide applies to T2/T3 edits (~15 core pages, most types); T1
+  frontier authors writing the plan in one pass are exempt from the ceiling — the guardrail
+  exists for small-model incremental edits, not frontier synthesis.
 
 ## Done when
 
