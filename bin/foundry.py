@@ -11,13 +11,16 @@ from __future__ import annotations
 
 import argparse
 import datetime
+import os
 import re
 import shutil
 import sys
 from pathlib import Path
 
 HARNESS_ROOT = Path(__file__).resolve().parent.parent
-BIZ_ROOT = HARNESS_ROOT / "businesses"
+CORE_ROOT = HARNESS_ROOT                       # machinery only; user data must never land here
+WORKSPACE = Path(os.environ.get("FOUNDRY_WORKSPACE", "")).resolve() if os.environ.get("FOUNDRY_WORKSPACE") else None
+BIZ_ROOT = (WORKSPACE / "businesses") if WORKSPACE else (HARNESS_ROOT / "businesses")
 TEMPLATES = HARNESS_ROOT / "harness" / "templates"
 TODAY = datetime.date.today().isoformat()          # machine form (YYYY-MM-DD), internal only
 TODAY_WRITTEN = None  # set per business from config date-format at runtime
@@ -25,7 +28,12 @@ TODAY_WRITTEN = None  # set per business from config date-format at runtime
 def _fmt_date(iso: str) -> str:
     """Render an ISO date in the business's configured written format."""
     b = Path(_slug_cache) if _slug_cache and Path(_slug_cache).is_dir() else (BIZ_ROOT / _slug_cache if _slug_cache else None)
-    cfg = read(b / "registers" / "config.md") if b else ""
+    if b is None or not (b / "registers" / "config.md").exists():
+        # workspace template default (no business resolved yet)
+        fmt = "MM-DD-YYYY"
+        d = datetime.date.fromisoformat(iso)
+        return f"{d.month:02d}-{d.day:02d}-{d.year}" if fmt == "MM-DD-YYYY" else iso
+    cfg = read(b / "registers" / "config.md")
     fmt = "MM-DD-YYYY"
     m = re.search(r"\| CFG-\d{3} \| date-format \| ([A-Z-]+) \|", cfg) if cfg else None
     if m:
@@ -149,6 +157,13 @@ def append_table_row(path: Path, values: list[str]) -> None:
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 def update_front(path: Path, key: str, value: str) -> None:
+    # stamp written dates in written format (bug fix: was ISO) — resolve config if possible
+    try:
+        global _slug_cache
+        written = _fmt_date(TODAY) if key == "updated" and _slug_cache else value
+    except Exception:
+        written = value
+    value = written
     text = read(path)
     if text.startswith("---"):
         end = text.find("\n---", 3)
@@ -172,7 +187,9 @@ def cmd_init(args):
     dest = BIZ_ROOT / slug
     if dest.exists():
         fail(f"businesses/{slug} already exists")
-    BIZ_ROOT.mkdir(exist_ok=True)
+    if WORKSPACE and not WORKSPACE.exists():
+        fail(f"workspace {WORKSPACE} does not exist — create it first (mkdir) or set FOUNDRY_WORKSPACE to an existing dir")
+    BIZ_ROOT.mkdir(parents=True, exist_ok=True)
 
     def t(name: str) -> str:
         return read(TEMPLATES / name)
@@ -198,16 +215,9 @@ def cmd_init(args):
     (dest / "business-profile.md").write_text(prof_fm + body, encoding="utf-8")
 
     # plan docs
-    plan_docs = {
-        "00-goals-mission.md": "00-goals-mission.md",
-        "10-market-research.md": "10-market-research.md",
-        "20-financial-plan.md": "20-financial-plan.md",
-        "30-competition-analysis.md": "30-competition-analysis.md",
-        "40-marketing-gtm.md": "40-marketing-gtm.md",
-        "50-brand-identity.md": "50-brand-identity.md",
-    }
-    for fname, tname in plan_docs.items():
-        (dest / "docs" / "business-plan" / fname).write_text(
+    for tname in ["00-goals-mission", "10-market-research", "20-financial-plan",
+                  "30-competition-analysis", "40-marketing-gtm", "50-brand-identity"]:
+        (dest / "docs" / "business-plan" / f"{tname}.md").write_text(
             fm + t(tname).replace("<Name>", args.name), encoding="utf-8")
     (dest / "docs" / "business-plan" / "00-master-plan.md").write_text(
         fm + t("00-master-plan.md").replace("<Name>", args.name), encoding="utf-8")
@@ -570,7 +580,7 @@ def cmd_validate(args):
             disp = r[2] if len(r) > 2 else ""
             if disp not in FLOOR_OK:
                 problems.append(f"intake floor field {r[0]}: invalid/missing disposition '{disp}'")
-            if r[1].startswith("Offering") and disp != "captured":
+            elif r[1].startswith("Offering") and disp != "captured":
                 problems.append(f"intake floor field 1 (Offering): must be 'captured', got '{disp}'")
             ev = r[4] if len(r) > 4 else ""
             if disp == "extrapolated" and not re.search(r"A-\d{3}", ev):
@@ -592,6 +602,11 @@ def cmd_validate(args):
             basis = row.get("basis", "")
             if basis.startswith("override") and not re.search(r"D-\d{3}", basis):
                 problems.append(f"config.md: {key} override without logged decision")
+            if key == "spend-threshold":
+                try:
+                    float(row.get("value", ""))
+                except ValueError:
+                    problems.append(f"config.md: spend-threshold '{row.get('value')}' is not numeric")
             if key == "date-format" and row.get("value", "") not in ("MM-DD-YYYY", "DD-MM-YYYY", "YYYY-MM-DD"):
                 problems.append(f"config.md: unsupported date-format '{row.get('value')}'")
 
@@ -640,16 +655,32 @@ def cmd_validate(args):
             if prev == "P0" or prev in GATE_ORDER[1:6]:
                 if prev not in g and prev != "P0":
                     problems.append(f"gate {p} recorded but {prev} missing")
-    # CONDITIONAL gates: every condition must trace to a tracked task row
-    tks = reg(b, "tasks")
-    task_txt = " ".join(t.get("task", "") + " " + t.get("done when", "") + " " + t.get("id", "") for t in tks)
+    # [U] gates require recorded user approval (automatic fail #4, now mechanical)
+    U_GATES = {"P0", "P1", "P3", "P5"}  # G0/G1/G3/G5 are user-approval gates per GATES.md
     for rec in (b / "gates").glob("*-record.md") if (b / "gates").is_dir() else []:
         txt = read(rec)
-        if "- verdict: CONDITIONAL" in txt and "- conditions:" in txt:
-            # notes carry the condition descriptions — each needs a T-nnn trace
-            m = re.search(r"- notes: (.+)$", txt, re.M)
-            if m and "T-P" not in txt:
-                problems.append(f"{rec.name}: CONDITIONAL verdict with conditions but no task references in record")
+        vm = re.search(r"- verdict: (PASS|CONDITIONAL)", txt)
+        if vm:
+            gate_p = re.match(r"(P\d)-record", rec.name)
+            if gate_p and gate_p.group(1) in U_GATES:
+                um = re.search(r"- \[U\] user approval: (.+)$", txt, re.M)
+                if not um or "not recorded" in um.group(1):
+                    problems.append(f"{rec.name}: [U] gate passed without recorded user approval")
+
+    # CONDITIONAL gates: every condition must trace to a tracked task row (hardened:
+    # conditions line must cite T-nnn IDs that exist in the tasks register)
+    tks = reg(b, "tasks")
+    task_ids = {t.get("id", "") for t in tks}
+    for rec in (b / "gates").glob("*-record.md") if (b / "gates").is_dir() else []:
+        txt = read(rec)
+        if "- verdict: CONDITIONAL" in txt:
+            cited = set(re.findall(r"T-P\d-\d{3}", txt))
+            if "- conditions:" in txt:
+                if not cited:
+                    problems.append(f"{rec.name}: CONDITIONAL verdict with conditions but no task references in record")
+                elif not cited.issubset(task_ids):
+                    missing = cited - task_ids
+                    problems.append(f"{rec.name}: CONDITIONAL conditions cite unknown task IDs {sorted(missing)}")
     if problems:
         print("PROBLEMS FOUND:")
         for p in problems:
@@ -759,7 +790,9 @@ def cmd_rollup(args):
             row = dict(zip([h.lower() for h in ch], r))
             if str(row.get("basis", "")).startswith("override"):
                 overrides.append(row)
-    due_comp = [c for c in comp if c.get("deadline") and c["deadline"] >= TODAY and c.get("status", "") in ("", "TODO", "DOING")]
+    today_iso = datetime.date.today().isoformat()
+    due_comp = [c for c in comp if c.get("deadline") and _norm_due(c["deadline"]) >= today_iso
+                and c.get("status", "") in ("", "TODO", "DOING")]
     if due_comp:
         print("upcoming compliance: " + "; ".join(fmt_row(c, ['id', 'deadline', 'item']) for c in due_comp[:3]))
     if live_flex:

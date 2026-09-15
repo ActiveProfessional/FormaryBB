@@ -48,9 +48,12 @@ plan, Ops = operations, GTM = marketing, Brand, Tech = tech plan, Exec = executi
 | tech-platform | core | » | » | » | » | core | core | » | » |
 | nonprofit-civic | » | » | » | core | core | core | core | core | core |
 | holding-entity | core | » | ~ | ~ | ~ | ~ | ~ | ~ | core |
+| other | core | core | core | core | core | core | core | core | core |
 
 **~** = stub with pointer + `D-nnn` (why deferred); **»** = deep treatment required;
-core = standard template treatment.
+core = standard template treatment. **`other`** rows are all-core by default: when a
+business types itself `other`, every section gets standard treatment (nothing stubbed
+without a logged reason) and the type hint should be refined at P1 to a real type or blend.
 
 ## Per-type notes
 

@@ -1,0 +1,9 @@
+# user/business data must never live in the core repo — see WORKSPACES.md
+businesses/
+workspace/
+*.local/
+.env
+.env.*
+.DS_Store
+__pycache__/
+*.pyc

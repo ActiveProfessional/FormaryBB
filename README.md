@@ -22,22 +22,30 @@ until the previous gate is recorded PASS or CONDITIONAL (conditions become track
 ## Quickstart
 
 ```bash
-# 1. Start a business (creates businesses/<slug>/ from templates)
+# 0. Point the CLI at YOUR workspace (data never lands in the core repo)
+export FOUNDRY_WORKSPACE=~/my-foundry-workspace    # see WORKSPACES.md
+
+# 1. Start a business (creates <workspace>/businesses/<slug>/ from templates)
 python3 bin/foundry.py init my-biz "My Business" --region US-WI --type local-service
 
 # 2. Work the chain
-python3 bin/foundry.py status my-biz        # where are we?
-python3 bin/foundry.py next my-biz          # what's next?
-python3 bin/foundry.py workorder my-biz T-P2-001   # brief one task for any model
-python3 bin/foundry.py gate my-biz P0 --pass --notes "intake complete"
-python3 bin/foundry.py validate my-biz      # automated repo health checks
-python3 bin/foundry.py rollup my-biz        # ≤600-token resume pack for any session
+python3 bin/foundry.py session my-biz --tier t1   # reading list for this session's model tier
+python3 bin/foundry.py status my-biz              # where are we?
+python3 bin/foundry.py next my-biz               # what's next?
+python3 bin/foundry.py workorder my-biz T-P2-001 --tier t3  # brief one task for a local model
+python3 bin/foundry.py gate my-biz P0 --pass --notes "intake complete" --user-approval "user confirmed <date>"
+python3 bin/foundry.py validate my-biz            # automated repo health checks (--strict for more)
+python3 bin/foundry.py rollup my-biz              # ≤600-token resume pack (--tier t3 trims to ~300)
 ```
 
 Then follow `harness/phases/P0-INTAKE.md`. The business repo (not this harness) is the
 source of truth for that business. Every command also accepts a path instead of a slug —
 that's how the frozen demo in `examples/lakeside-roasters/` stays addressable
-(`foundry.py status examples/lakeside-roasters`).
+(`foundry.py status examples/lakeside-roasters`). Keep business data in a **workspace**,
+not the core repo — `WORKSPACES.md` explains the three-layer model (core / workspace /
+overlay) and why core stays clean.
+
+**License:** MIT — see `LICENSE`. **Version:** see `CHANGELOG.md` and git tags.
 
 ## Repo map
 

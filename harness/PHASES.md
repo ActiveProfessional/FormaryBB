@@ -31,7 +31,7 @@ days, while a regulated or funded venture takes longer. Effort follows risk, not
 | Quarterly gate | P7's recurring review (metrics vs. targets, compliance sweep, plan amendments) |
 | [U] | User approval required before action — verdicts and one-way doors always |
 | » / ~ | Depth markers from the business-type playbooks: go deep / stub-with-logged-reason |
-| [SLUG] | Calendar event tag tying events to a business (e.g. `[LAKESIDE]`) |
+| [SLUG] | Calendar event tag tying events to a business (e.g. `[LAKESIDE-ROASTERS]`) |
 | T/Q/D/F/A/R/C/FM | Register ID prefixes: task, question, decision, fact, assumption, risk, compliance, flex module |
 | Flex module (FM-nnn) | Business-specific extension to the chain — proposed by models, activated only by the user |
 | N/A → (D-nnn) | Deliberately skipped, with the logged reason. Never blank, never silent |
