@@ -372,7 +372,7 @@ def cmd_gate(args):
         if p not in gates_passed(b) and p in ["P1", "P2", "P3", "P4", "P5"]:
             fail(f"gate {p} not passed yet — cannot record {args.phase}")
     rec.write_text(
-        f"---\nbusiness: {args.slug}\ntype: gate\nupdated: {TODAY}\n---\n\n"
+        f"---\nbusiness: {args.slug}\ntype: gate\nupdated: {_fmt_date(TODAY)}\n---\n\n"
         f"# {args.phase} Gate Record\n\n"
         f"- verdict: {verdict}\n- date: {_fmt_date(TODAY)}\n- recorded by: {args.by}\n"
         f"- notes: {args.notes or '(none)'}\n"
@@ -466,29 +466,30 @@ def cmd_workorder(args):
         fail(f"task {args.id} not found in registers/tasks.md")
     wdir = b / "scratch"
     wdir.mkdir(exist_ok=True)
-    wonum = next_id([p.name for p in wdir.glob("WO-*.md")], "WO-")
+    wonum = next_id([p.stem for p in wdir.glob("WO-*.md")], "WO-")
     wo = wdir / f"{wonum}.md"
+    t3 = getattr(args, "tier", "") == "t3"
     wo.write_text(f"""---
 business: {args.slug}
 type: workorder
 status: open
-updated: {TODAY}
+updated: {_fmt_date(TODAY)}
 ---
 
 # {wonum} — {t.get('task', '')}
 
 requested-by: orchestrator        # work may only be requested by the orchestrator
-date: {TODAY}
-budget: ~30 min / one focused pass
-output: (register rows or doc section — state exactly)
+date: {_fmt_date(TODAY)}
+budget: {"~15 min / one register touch" if t3 else "~30 min / one focused pass"}
+output: ({"ONE register, stated exactly" if t3 else "register rows or doc section — state exactly"})
 links: registers/tasks.md (row {args.id})
 
 ## Context (what you must know to do this)
-- (business-relevant facts from the rollup — IDs, not prose)
-- (any source links or constraint the executor needs)
+- ({"the single fact/constraint this work needs — one line, IDs not prose" if t3 else "business-relevant facts from the rollup — IDs, not prose"})
+{"- (any source links or constraint the executor needs)" if not t3 else ""}
 
 ## Task
-1. (concrete steps; one unit of work; only files named in output)
+{"1. (ONE step, ONE file — do exactly this and stop)" if t3 else "1. (concrete steps; one unit of work; only files named in output)"}
 
 ## Done when
 - (checkable evidence — matches the task row's done-when)
@@ -497,6 +498,7 @@ links: registers/tasks.md (row {args.id})
 - Append-only on registers; never delete or renumber existing rows.
 - No decisions: if you find a fork requiring judgment, stop and report it.
 - Unsourced numbers are forbidden; label estimates `est.` with an A-nnn.
+{"- One register only; do not open or touch any other file." if t3 else ""}
 """, encoding="utf-8")
     print(f"work order drafted: {wo}")
     print("fill Context/Task/Done when from the rollup before handing to an executor")
@@ -638,6 +640,16 @@ def cmd_validate(args):
             if prev == "P0" or prev in GATE_ORDER[1:6]:
                 if prev not in g and prev != "P0":
                     problems.append(f"gate {p} recorded but {prev} missing")
+    # CONDITIONAL gates: every condition must trace to a tracked task row
+    tks = reg(b, "tasks")
+    task_txt = " ".join(t.get("task", "") + " " + t.get("done when", "") + " " + t.get("id", "") for t in tks)
+    for rec in (b / "gates").glob("*-record.md") if (b / "gates").is_dir() else []:
+        txt = read(rec)
+        if "- verdict: CONDITIONAL" in txt and "- conditions:" in txt:
+            # notes carry the condition descriptions — each needs a T-nnn trace
+            m = re.search(r"- notes: (.+)$", txt, re.M)
+            if m and "T-P" not in txt:
+                problems.append(f"{rec.name}: CONDITIONAL verdict with conditions but no task references in record")
     if problems:
         print("PROBLEMS FOUND:")
         for p in problems:
@@ -645,10 +657,45 @@ def cmd_validate(args):
         sys.exit(1)
     print(f"validate {args.slug}: OK — files present, registers parse, no rule violations")
 
+# ---------------------------------------------------------------- session
+
+def cmd_session(args):
+    """Print the recommended reading list + first commands for the declared tier."""
+    b = biz_dir(args.slug)
+    tier = (getattr(args, "tier", "") or "t2").lower()
+    g = gates_passed(b)
+    cur = "P0"
+    for p in GATE_ORDER:
+        if p in g:
+            cur = next_phase(p)
+    brief = {"P0": "P0-INTAKE", "P1": "P1-VETTING", "P2": "P2-FOUNDATION", "P3": "P3-PLAN",
+             "P4": "P4-TECH-INFRA", "P5": "P5-EXECUTION", "P7": "P7-OPERATE"}[cur]
+    print(f"session start — {args.slug} | phase {cur} | tier {tier}")
+    if tier == "t3":
+        print("reading (T3 — executor pattern):")
+        print("  1. foundry.py rollup <slug> --tier t3      (~300 tokens)")
+        print("  2. your ONE work order — read it fully, then execute exactly it")
+        print("never: multi-file synthesis, gates, decisions. Report rows changed, stop.")
+    elif tier == "t1":
+        print("reading (T1 — frontier pattern):")
+        print("  1. foundry.py rollup <slug>                  (orient, ≤600 tokens)")
+        print(f"  2. harness/phases/{brief}.md               (current phase brief)")
+        print("  3. WIDE-READ AUTHORIZED for synthesis work (gates, plan authoring, audits):")
+        print("     load the full relevant doc set + all registers in one pass")
+        print("  batch freely; skip per-row work orders; log evidence rows for self-executed work")
+    else:
+        print("reading (T2 — mid pattern, default when unknown):")
+        print("  1. foundry.py rollup <slug>                  (orient, ≤600 tokens)")
+        print(f"  2. harness/phases/{brief}.md               (current phase brief)")
+        print("  3. up to 2-3 registers as the task needs     (L2 reads only)")
+        print("  delegate self-contained units as work orders (≤2k tokens); verify per risk-tier rules")
+    print("then: work -> record rows + evidence -> commit -> ≤10-line report")
+
 # ---------------------------------------------------------------- rollup
 
 def cmd_rollup(args):
     b = biz_dir(args.slug)
+    t3 = getattr(args, "tier", "") == "t3"
     prof = read(b / "business-profile.md")
     name = (re.search(r"^name: (.+)$", prof, re.M) or [None, args.slug])[1]
     region = (re.search(r"^region: (.+)$", prof, re.M) or [None, "-"])[1]
@@ -685,21 +732,21 @@ def cmd_rollup(args):
           f"{stats.get('DONE',0)} done, {stats.get('TODO',0)} todo, {stats.get('DOING',0)} doing, "
           f"{stats.get('BLOCKED',0)} blocked | overdue: {len(overdue)}")
     if doing:
-        print("doing: " + "; ".join(fmt_row(t, ['id', 'task']) for t in doing[:3]))
+        print("doing: " + "; ".join(fmt_row(t, ['id', 'task']) for t in doing[:2 if t3 else 3]))
     if todo:
         due_sorted = sorted([t for t in todo if t.get("due")], key=lambda x: x["due"])
         undated = [t for t in todo if not t.get("due")]
-        nxt = (due_sorted + undated)[:3]
+        nxt = (due_sorted + undated)[:2 if t3 else 3]
         print("next: " + "; ".join(fmt_row(t, ['id', 'due', 'task']) for t in nxt))
     if blocking:
-        print(f"blocking questions: " + "; ".join(fmt_row(q, ['id', 'question']) for q in blocking[:3]))
-    if open_q and not blocking:
+        print(f"blocking questions: " + "; ".join(fmt_row(q, ['id', 'question']) for q in blocking[:2 if t3 else 3]))
+    if open_q and not blocking and not t3:
         print(f"open questions: {len(open_q)} (none blocking)")
     if overdue:
         print("overdue: " + "; ".join(fmt_row(t, ['id', 'due', 'task']) for t in overdue[:3]))
     if top_risks:
-        print("top risks: " + "; ".join(fmt_row(r, ['id', 'risk']) for r in top_risks))
-    if last_dec:
+        print("top risks: " + "; ".join(fmt_row(r, ['id', 'risk']) for r in top_risks[:2 if t3 else 3]))
+    if last_dec and not t3:
         print("recent decisions: " + "; ".join(fmt_row(d, ['id', 'decision']) for d in last_dec))
     # active/proposed flex modules (Q2: a session can't act on flex work it can't see)
     flex = reg(b, "flex")
@@ -786,6 +833,7 @@ def main():
     p = sub.add_parser("workorder", help="draft a work order for a task (executor interface)")
     p.add_argument("slug")
     p.add_argument("id")
+    p.add_argument("--tier", choices=["t1", "t2", "t3"], help="t3 = tighter single-register skeleton")
     p.set_defaults(fn=cmd_workorder)
 
     p = sub.add_parser("validate", help="automated repo health checks")
@@ -795,7 +843,13 @@ def main():
 
     p = sub.add_parser("rollup", help="≤600-token session pack (paste into any new session)")
     p.add_argument("slug")
+    p.add_argument("--tier", choices=["t1", "t2", "t3"], help="t3 = trimmed ~300-token pack")
     p.set_defaults(fn=cmd_rollup)
+
+    p = sub.add_parser("session", help="print the recommended reading list for the declared tier")
+    p.add_argument("slug")
+    p.add_argument("--tier", choices=["t1", "t2", "t3"], default="t2", help="declared model tier (default t2)")
+    p.set_defaults(fn=cmd_session)
 
     args = ap.parse_args()
     args.fn(args)
