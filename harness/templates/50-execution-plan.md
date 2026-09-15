@@ -10,6 +10,12 @@ updated: 2026-09-14
 The narrative plan lives here; the **authoritative task list is `registers/tasks.md`**.
 If a task is in one place it must be in both — one row in prose, full detail in the register.
 
+## Launch definition
+
+**This business is "launched" when:** <one line, chosen per type — first service delivered /
+first sale shipped / first subscriber / first paying client / first event held / entity
+operational / first beneficiary served>. Every launch-day checklist item answers to this.
+
 ## Critical path
 
 The ≤7 tasks that, if late, move launch. Reviewed with the user **[U]**.

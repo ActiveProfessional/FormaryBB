@@ -32,6 +32,10 @@ PIPELINE → DRAFT → REVIEW (orchestrator) → SHARE [U] → RESPONSE → INTE
 
 ## Cadence
 
+- **Proposal aging (decision debt rules):** a proposal **shared but unanswered** is flagged
+  at the monthly snapshot after 30 days; **auto-deferred at 60 days** with a re-surface
+  trigger at the next quarterly review (trigger + date recorded in the pipeline row).
+  Unanswered proposals are decision debt — they age, they don't linger silently.
 - **Quarterly review slot:** rank the pipeline, pick at most 1–3 proposals to draft (capacity
   honesty), retire the dead ones. The pipeline is a funnel, not a museum.
 - Any metric that crosses its `watch-level` (quarterly gate) can force a proposal early.

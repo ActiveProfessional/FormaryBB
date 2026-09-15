@@ -516,6 +516,22 @@ def cmd_validate(args):
     for n in ["tasks", "questions", "decisions", "business-facts", "assumptions", "risks", "compliance", "flex", "roles", "config"]:
         if not (b / "registers" / f"{n}.md").exists():
             problems.append(f"missing register: registers/{n}.md")
+    # harvest completeness (strict): every open C-nnn needs a task or DONE evidence
+    if args.strict:
+        tks = reg(b, "tasks")
+        task_txt = " ".join(t.get("task", "") for t in tks) + " " + " ".join(t.get("done when", "") for t in tks)
+        ch2, cd2 = parse_table(b / "registers" / "compliance.md")
+        if ch2 and "id" in ch2:
+            for r in cd2:
+                row = dict(zip([h.lower() for h in ch2], r))
+                if row.get("status", "") in ("", "TODO", "DOING") and row.get("id", "") not in task_txt:
+                    problems.append(f"compliance {row.get('id')}: no matching task row (harvest completeness)")
+        # insurance/banking decisions in incorporation doc need tasks or DONE evidence
+        inc = read(b / "docs" / "legal" / "10-incorporation.md").lower()
+        for kw, label in (("bank account", "Business bank account"), ("insurance", "Insurance quotes")):
+            if f"- [ ] {label}".lower() in inc and kw not in task_txt.lower():
+                problems.append(f"incorporation checklist item '{label}' has no matching task row")
+
     # flex module integrity: valid anchor + user activation, core phases untouched
     VALID_ANCHORS = {"P1-pivot", "P2", "P3P4-parallel", "pre-P5", "P7-recurring", "P6-driven"}
     fh, fd = parse_table(b / "registers" / "flex.md")
@@ -605,11 +621,14 @@ def cmd_validate(args):
             if row.get("status", "").startswith("OPEN") and blk in GATE_ORDER:
                 if GATE_ORDER.index(blk) <= cur_idx:  # only a problem once that gate is at hand
                     problems.append(f"{row['id']}: OPEN and blocking gate {blk}")
-    # front matter freshness on registers
+    # front matter freshness on registers (date-format-aware: written or ISO both count)
+    today_iso = datetime.date.today().isoformat()
     for p in (b / "registers").glob("*.md"):
         txt = read(p)
-        if txt.startswith("---") and f"updated: {TODAY}" not in txt.split("---")[1] and args.strict:
-            problems.append(f"{p.name}: updated stamp not today (stale?)")
+        if txt.startswith("---") and args.strict:
+            m = re.search(r"^updated: (.+)$", txt.split("---")[1], re.M)
+            if m and _norm_due(m.group(1).strip()) != today_iso:
+                problems.append(f"{p.name}: updated stamp not today (stale?)")
     # gate chain sanity
     g = gates_passed(b)
     for p in GATE_ORDER[1:6]:

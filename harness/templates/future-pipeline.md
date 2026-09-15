@@ -18,3 +18,7 @@ quarter (capacity honesty).
 **Rules:** new ideas enter at the bottom with a rank re-scored each quarterly review. Deferred
 items need a trigger + date. Declined items stay visible with their reason. Anything drafted
 gets `docs/future/proposal-vN.md` via the proposal template and follows the P6 cycle.
+
+**Aging:** shared-unanswered proposals get flagged at the monthly snapshot after 30 days,
+auto-deferred at 60 with a re-surface trigger at the next quarterly review. Statuses gain
+`deferred (aging)` for the auto-deferred case.

@@ -3,14 +3,14 @@ business: lakeside-roasters
 phase: P0
 type: document
 status: draft
-updated: 2026-09-14
+updated: 09-14-2026
 ---
 
 ---
 phase: P7
 type: template
 status: draft
-updated: 2026-09-14
+updated: 09-14-2026
 ---
 
 # Metrics — Lakeside Roasters

@@ -1,7 +1,7 @@
 ---
 business: lakeside-roasters
 type: register
-updated: 2026-09-14
+updated: 09-15-2026
 ---
 
 # Registers — Lakeside Roasters

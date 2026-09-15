@@ -8,6 +8,13 @@ events, and the new-company metadata tagging that keeps obligations findable.
 
 ## Steps
 
+0. **Define launch (first).** Some businesses don't "launch" to customers. Name the
+   **launch-equivalent** for this business before planning toward it — chosen per type:
+   first service delivered (local service), first sale shipped (retail/ecom), first
+   subscriber (content), first paying client (agency), first event held (community),
+   entity operational (holding), first beneficiary served (nonprofit). Record it as the
+   launch-definition line in `50-execution-plan.md`; every launch-day checklist item
+   answers to it. A launch with no definition is a vibe, not a milestone.
 1. **Harvest every promise** — sweep P2–P4 docs and gates for anything that must happen:
    filings, purchases, hires, builds, launches, reviews. Every harvest becomes a `T-P5-nnn`
    row (or lands in an earlier phase's ID range with a note). **Nothing promised lives

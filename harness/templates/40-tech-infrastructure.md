@@ -11,6 +11,13 @@ updated: 2026-09-14
 (shell agent) + langflow**, unless the user specified otherwise. Any deviation is a logged
 `D-nnn` with the reason. See `harness/lib/toolstack-reference.md`.
 
+## Minimal-stack declaration (when playbook marks tech ~)
+
+One logged decision replaces the tables below for simple businesses:
+`D-nnn: minimal stack — <one line, e.g. phone + GBP + invoicing app; internal AI stack for
+follow-ups only>`. Skip to Security baseline + Procurement; the tables below are mandatory
+for any type with **»** tech.
+
 ## Needs inventory
 
 | Business function | Software needed | Covered by default stack? | Decision |

@@ -1,7 +1,7 @@
 ---
 business: lakeside-roasters
 type: register
-updated: 2026-09-14
+updated: 09-15-2026
 ---
 
 # Business Facts — Lakeside Roasters
@@ -10,10 +10,10 @@ updated: 2026-09-14
 
 | ID | Statement | Value | Source + date | Confidence | Phase |
 |----|-----------|-------|--------------|-----------|-------|
-| F-001 | Founder capital available | $3,000 | founder, 2026-09-14 | reported | P0 |
-| F-002 | Weekly hours available | ~10 | founder, 2026-09-14 | reported | P0 |
-| F-003 | Green coffee cost (hobby supplier) | ~$6.50/lb | founder, 2026-09-14 | estimated | P0 |
-| F-004 | Target retail price anchor | $16–18 / 12 oz bag | founder, 2026-09-14 | reported | P0 |
-| F-005 | Local competitive set (founder's awareness) | 4 local roasters + Starbucks; no known nearby subscription rival | founder, 2026-09-14 | reported | P0 |
+| F-001 | Founder capital available | $3,000 | founder, 09-14-2026 | reported | P0 |
+| F-002 | Weekly hours available | ~10 | founder, 09-14-2026 | reported | P0 |
+| F-003 | Green coffee cost (hobby supplier) | ~$6.50/lb | founder, 09-14-2026 | estimated | P0 |
+| F-004 | Target retail price anchor | $16–18 / 12 oz bag | founder, 09-14-2026 | reported | P0 |
+| F-005 | Local competitive set (founder's awareness) | 4 local roasters + Starbucks; no known nearby subscription rival | founder, 09-14-2026 | reported | P0 |
 
 Confidence: verified (primary source) / reported (secondary) / estimated (math shown) / guessed (labeled).

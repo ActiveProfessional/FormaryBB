@@ -17,6 +17,11 @@ WORK (tasks) → MEASURE (metrics) → REVIEW (rituals) → ADJUST (tasks, propo
 1. **Metrics live** → `metrics.md` (template): actuals vs. targets, weekly or monthly per
    the business-type playbook. Every metric has a source (statement, platform dashboard,
    hand count) — no vanity metrics without a decision they inform.
+   - **Minimum metric set (every operating business, every type):** cash position (the
+     monthly standing row — runway months), revenue or its mission-equivalent (beneficiaries
+     served, events held, grants won), and customer pipeline or its mission-equivalent
+     (leads, inquiries, applications). Type-specific metrics layer on per playbook; the
+     minimum three are the floor that keeps the quarterly gate honest.
 2. **Task rhythm** — work the register top-down; new work enters as tasks with IDs, never as
    chat promises. Blocked > due-date risk → surface in the weekly review, not in silence.
 3. **Rituals** (see RUNBOOK.md): weekly review (user), monthly snapshot + `validate`,

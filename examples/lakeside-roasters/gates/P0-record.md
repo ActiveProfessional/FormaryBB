@@ -1,7 +1,7 @@
 ---
 business: lakeside-roasters
 type: gate
-updated: 2026-09-14
+updated: 09-14-2026
 ---
 
 # P0 Gate Record

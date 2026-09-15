@@ -3,7 +3,7 @@ business: lakeside-roasters
 phase: P0
 type: document
 status: approved
-updated: 2026-09-14
+updated: 09-14-2026
 slug: lakeside-roasters
 name: Lakeside Roasters
 region: US-WI
@@ -35,7 +35,7 @@ Dane County Farmers Market and a smaller east-side market, (b) a weekly subscrip
 delivered locally. Not a café — no retail space, no employees in year 1.
 
 > "I want to be the coffee people bring to their neighbors, not the coffee that competes
-> with Starbucks." — founder, 2026-09-14
+> with Starbucks." — founder, 09-14-2026
 
 ## Mission (as intended)
 
@@ -55,10 +55,10 @@ business the founder actually enjoys.
 
 | Fact | Detail | Source |
 |---|---|---|
-| Capital available | $3,000 | founder, 2026-09-14 |
-| Weekly hours available | ~10 | founder, 2026-09-14 |
+| Capital available | $3,000 | founder, 09-14-2026 |
+| Weekly hours available | ~10 | founder, 09-14-2026 |
 | Target price point | $16–18 / 12 oz bag | founder's anchor; verify vs. market (P1) |
-| Green coffee cost (current) | ~$6.50/lb est. from current hobby supplier | founder, 2026-09-14 |
+| Green coffee cost (current) | ~$6.50/lb est. from current hobby supplier | founder, 09-14-2026 |
 
 ## Regional / niche specifics
 

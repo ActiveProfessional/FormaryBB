@@ -12,6 +12,11 @@ default preference for an **internal team structure and open-source AI tooling**
    which of those need software: selling, marketing, scheduling, invoicing, inventory,
    accounting, support, content. Map each to a tool category; mark categories the internal
    stack can cover.
+   - **Minimal-stack declaration:** when the business-type playbook marks tech **~**, the
+     full toolstack table is ceremony — write one logged decision instead
+     (`D-nnn: minimal stack — <one line: e.g. phone + GBP + invoicing app; internal AI stack
+     for follow-ups only>`), fill the template's stack table only if reality is more complex
+     than the line. The table stays mandatory for any type with **»** tech.
 2. **» Tech stack decisions** → `docs/plan/40-tech-infrastructure.md` (template) —
    for each category: options, decision, cost, why. Every choice gets a `D-nnn`.
    - **Default preference:** internal team structure using **openwebui** (model routing,
