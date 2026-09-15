@@ -22,10 +22,11 @@ is derived in later phases. Missing items become questions, never assumptions.
 3. **Fill `business-profile.md`** (template). Verbatim quotes where the user said something
    in their own words — the record of intent is evidence.
 4. **Walk the intake floor.** The floor is the minimum P1 will not start without — six fields
-   (offering, locale, expected customer, founder capacity, competitive awareness, type hint),
-   each needing a disposition: `captured` (user provided → fact row), `extrapolated` (user
-   doesn't have it → model's best contextual judgment as an A-nnn, kill-test first in the P1
-   plan), or `unknown-by-choice` (user confirmed they don't know → Q-nnn, non-blocking).
+   (offering, locale, expected customer, founder capacity, competitive awareness, type hint;
+   the Tier 1 interview questions), each needing a disposition: `captured` (user provided →
+   fact row), `extrapolated` (user doesn't have it → model's best contextual judgment as an
+   A-nnn, kill-test first in the P1 plan), or `unknown-by-choice` (user confirmed they don't
+   know → Q-nnn, non-blocking).
    - **Ask for everything; gate only on the floor.** The question seeds are asked of every
      requestor — but only the six floor fields can block. A one-line idea passes with five
      extrapolations; a detailed brief passes with everything captured.
@@ -55,12 +56,25 @@ is derived in later phases. Missing items become questions, never assumptions.
    `gate <slug> P0 --pass` with the approval noted.
 9. **Announce** P1 start + first tasks.
 
-## Question seeds (minimum set)
+## Question seeds — explicit two-tier interview structure
 
-What are you selling, to whom, and where? Why you? What's the money story (price, cost)?
-What do you already have (skills, assets, relationships, licenses)? What constraints
-(time, capital, family, existing job, non-competes)? What does success look like in 1 year?
-What would make you abandon it? What's the region and its quirks that affect the idea?
+**Tier 1 — floor fields (blocking):** collected first, without exception. These six map 1:1
+to the intake floor and G0 cannot pass without them:
+1. What are you selling? (offering — must be `captured`)
+2. Where will this operate? (locale)
+3. Who might buy this? (expected customer)
+4. What can you bring — time, money, skills? (founder capacity)
+5. What do you know about who does this today? (competitive awareness — "P1 will research" is a fine answer)
+6. What kind of business is this? (type hint — a guess is fine, refined at P1)
+
+**Tier 2 — everything else (asked, never blocking):** asked opportunistically as the
+conversation allows — mission in their own words, price anchors, personal constraints
+(family, existing job, non-competes), assets and relationships, success-in-1-year, abandon
+condition, regional quirks, stack preferences. Unanswered Tier 2 items become Q-nnn rows or
+A-nnn extrapolations — never blockers, never silently skipped.
+
+A terse requestor answers Tier 1 in five sentences and the session still ends G0-valid. A
+detailed requestor answers everything. Both are equally welcome; only Tier 1 can stop the gate.
 
 ## Done when
 

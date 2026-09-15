@@ -15,8 +15,13 @@ Evidence over enthusiasm.
    pain or a verifiable behavioral proxy. Record every contact as a fact row (privacy rule below).
 3. **» Competitors** → `registers/business-facts.md` rows + a competition snapshot section:
    who, price, reach, your honest edge. Include the do-nothing alternative — the real competitor.
-4. **» Economics sketch** — rough unit economics from facts+assumptions: price, COGS,
-   CAC, fixed costs, break-even, gross margin. This is a sketch — P3 financials make it rigorous.
+4. **» Economics sketch with break-even-or-bust** — rough unit economics from
+   facts+assumptions: price, COGS, CAC, fixed costs, gross margin — and the one mandatory
+   calculation: **at assumed price/cost, what volume makes this worth doing, and is that
+   volume plausible given the market evidence?** (break-even volume ÷ segment size ÷
+   realistic capture rate = plausibility). A business that needs 40% market capture to pay
+   its founder minimum wage is dead on arrival — G1 checks the plausibility line exists and
+   is answered. P3 financials make it rigorous; P1 makes it *survivable*.
 5. **» Regulatory & barrier scan** — licenses, permits, zoning, industry rules, personal
    qualification requirements (licenses, background checks), insurance. Rows in `compliance.md`
    (verify-only at this phase; a task may be "have professional confirm C-004").
@@ -48,6 +53,14 @@ and get recorded verbatim in the scan's user-response section.
   Madison raised X") — no names/PII in the repo; raw notes stay with the founder, or in
   `source/` if shareable.
 - Budget the research: hours per question, per the question seeds doc.
+- **Evidence fallback ladder (when the founder can't reach prospects):** if no direct
+  contact is possible (no network, distant market, pre-relocation), climb the ladder instead:
+  (1) behavioral proxies — existing spend on substitutes, search volume, forum/review
+  complaints (strongest), (2) adjacent-market evidence — how similar needs are served
+  elsewhere, (3) secondary research only (weakest, label it). Every verdict resting on
+  ladder evidence carries a mandatory **"first-contact verification" task in P5** — the
+  extrapolated demand gets tested the moment real customers are reachable. Ladder evidence
+  supports a GO; it never supports a GO with confidence.
 
 ## Done when
 
@@ -67,6 +80,7 @@ written; G1 recorded.
 
 ## Gate criteria (G1)
 
-Customer evidence ≥ playbook minimum per segment; kill-tested assumptions; verdict decision
+Customer evidence ≥ playbook minimum per segment (or the fallback ladder + verification task);
+break-even-or-bust plausibility line answered; kill-tested assumptions; verdict decision
 recorded; **any draft KILL carries a pivot scan** (options tested, user response on record)
 before confirmation; **[U]** verdict shared with the user before P2 begins.

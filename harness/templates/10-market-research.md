@@ -19,9 +19,9 @@ how a stranger would size it.
 
 | Metric | Value | Basis | Fact ID |
 |---|---|---|---|
-| TAM (smallest honest scope) | | est. or verified | F-nnn |
+| TAM (smallest honest scope) | | *often est.-flavored — local businesses: keep it a sentence, don't burn research hours on big-number vanity sizing* | F-nnn |
 | SAM (what we can reach) | | est. | F-nnn |
-| SOM (realistic year-1 share) | | est. | F-nnn |
+| SOM (realistic year-1 share) | | **the number the verdict actually rides on** | F-nnn |
 
 ## Trends & timing
 
@@ -52,3 +52,6 @@ The real competitor is usually the status quo.
 
 What this research changes about the P0 picture: pricing, segment choice, region, offering.
 Changes recorded as `D-nnn` decisions.
+
+**Break-even-or-bust (mandatory, feeds G1):** break-even volume ÷ segment size ÷ realistic
+capture rate = plausibility. State it here; the verdict rides on it.
