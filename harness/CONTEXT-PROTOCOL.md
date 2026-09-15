@@ -11,12 +11,44 @@ consumable as context, cheaply, by both frontier and small local models.
 - Solution: **write once, read small.** Registers hold every durable fact exactly once.
   Docs reference IDs. Session packs are regenerated from registers, never hand-copied.
 
+## Model tiers — calibrated defaults, not ceilings
+
+The harness is one repo; the reading pattern adapts to the model running it. **The tier sets
+defaults, the task sets ceilings, and observed performance recalibrates automatically** — no
+model sniffing, no self-identification probes.
+
+| Tier | Typical models | Context window | Default reading pattern | Work-unit size | Delegation |
+|---|---|---|---|---|---|
+| **T1 — Frontier** | large API models | 200k–1M+ | L1 rollup, then **wide-read authorized** for synthesis work (gate audits, plan authoring): may load the full relevant doc set + all registers in one pass | Batches; may self-execute small units and write plans in one sitting | *Optional* — delegating saves cost; T1 may self-execute when no executor pool exists |
+| **T2 — Mid** | strong mid-tier | 32k–128k | L0 (once) + L1 + phase brief + 2–3 registers per session | ≤2k-token work orders, one at a time | Orchestrator delegates self-contained units |
+| **T3 — Small/local** | 7–13B local | 4k–32k | L1 rollup (trimmed) + **one** work order; no multi-file synthesis ever | ≤1k-token work orders, single-register touches | Executor-only; never orchestrates |
+
+**Rules:**
+
+1. **Tier sets defaults; task sets ceilings.** T3 never reads more than it can hold; T1 doing
+   routine check-ins still starts with the rollup (cheap is cheap) — but for gates, plan
+   authoring, and audits, T1 is explicitly authorized to wide-read everything relevant at once.
+2. **Declared, never sniffed.** Tier comes from (a) environment metadata (openwebui router
+   config / system prompt), (b) the user, or (c) default **T2** when unknown — the safe middle.
+   Stored as config keys (`orchestrator-tier`, `executor-tier`), overridable per business like
+   every config value.
+3. **Observed performance recalibrates.** Work orders have checkable done-when criteria —
+   success/failure is objective. An executor that fails a 2k work order twice gets re-briefed
+   at ≤1k units (effective T3 pattern); one that handles multi-register work cleanly earns
+   wider units. The harness's evidence discipline *is* the capability probe — no probing, no
+   guessing about the model.
+
+**Ceremony scaling (tier-driven, the anti-overhead rule):** T1 need not write a work order to
+add a fact row — it does it directly and records the evidence. Work orders exist for delegation
+to smaller models, and for audit trails on one-way-door-adjacent work. A T1 batch is a
+logged decision + evidence rows, not a stack of per-row WOs.
+
 ## The 4-level context map (read top-down, only what the next step needs)
 
 | Level | Content | Budget | When read |
 |---|---|---|---|
 | L0 — Boot | This repo's `README.md` + `harness/PHASES.md` | ~1.2k tokens | First session with a model (once per model) |
-| L1 — Business pack | `foundry.py rollup <slug>` output (business card, gate state, task rollups, open questions, risks, decisions) | ≤600 tokens | **Every session, first read** |
+| L1 — Business pack | `foundry.py rollup <slug>` output (business card, gate state, task rollups, open questions, risks, decisions) | ≤600 tokens (T3: trimmed ~300) | **Every session, first read** |
 | L2 — Section read | One phase brief, one doc section, or one register filtered view | ≤3k tokens | Only what the current item needs |
 | L3 — Full file | A whole document or register | As needed | Only when authoring/auditing that file |
 
@@ -30,13 +62,13 @@ Rules:
 
 | Role | Tier | Does | Never does |
 |---|---|---|---|
-| **Orchestrator** | Frontier (or capable human) | Runs sessions, plans phases, writes plans/proposals, calls gates, drafts user-facing summaries, writes work orders | Bulk copy-editing, mechanical table updates it could delegate |
-| **Executor** | Any model, incl. small local | Executes one work order at a time: research a row, draft a section, update a register per its work order | Touches files outside its work order; makes decisions; calls gates |
+| **Orchestrator** | T1/T2 (or capable human) | Runs sessions, plans phases, writes plans/proposals, calls gates, drafts user-facing summaries, writes work orders | Bulk copy-editing, mechanical table updates it could delegate |
+| **Executor** | Any tier (T3 is executor-only) | Executes one work order at a time: research a row, draft a section, update a register per its work order | Touches files outside its work order; makes decisions; calls gates |
 | **User** | Human | Approves gates [U], one-way doors (entity, spend, names), answers questions | — |
 
 - The orchestrator **must** delegate when a unit of work is self-contained (it saves frontier
   tokens and keeps the local models practiced). It must not delegate: gate calls, judgments,
-  user-facing proposals, anything one-way.
+  user-facing proposals, anything one-way. T1 may self-execute when no executor pool exists.
 - Executors confirm: scope received → done → what changed (back-tick the exact rows).
 - When an executor's output contradicts the rollup, the orchestrator resolves it — never assume.
 
@@ -44,6 +76,10 @@ Rules:
 
 A work order is a **complete** instruction set for one unit of work: an executor given only the
 work order (plus at most one linked doc) can do the job with zero chat history.
+
+**Tier-aware sizes:** T3 ≤1k tokens, single register, single step where possible; T2 ≤2k
+tokens, one unit = one register/doc touch; T1 batches freely and may self-execute without a
+work order (logging evidence rows instead).
 
 ```markdown
 # WO-041 — Verify Wisconsin LLC filing fee
@@ -84,15 +120,18 @@ Rules:
 1. BOOT (first time):        read L0 (harness README + PHASES.md)     ~1.2k
 2. ORIENT:                   run `foundry.py rollup <slug>`            ≤600 tokens
 3. READ:                     the phase brief for the current phase      ≤3k
-4. WORK:                     pick next task(s) from the phase brief,
-                             write or execute work orders, update registers
+4. WORK:                     pick next task(s) per tier pattern:
+                             T1 wide-read authorized for synthesis; batch + self-execute;
+                             T2 phase brief + 2-3 registers; delegate self-contained units;
+                             T3 one work order only
 5. RECORD:                   update task rows, mark items DONE with evidence, commit
 6. REPORT:                   ≤10-line summary to user: done / next / blocked / asked
 ```
 
 Budget for a routine working session: **~5–8k input tokens** — rollup + phase brief + one
-register + one doc section. Deep authoring sessions (writing a full plan section) may use
-the template + facts subset. Sessions that "just check status" use the rollup alone.
+register + one doc section. T1 synthesis sessions (gate audits, plan authorship) may
+wide-read and exceed this — authorized, not exceptional. Sessions that "just check status"
+use the rollup alone.
 
 ## Token discipline rules
 
@@ -105,6 +144,8 @@ the template + facts subset. Sessions that "just check status" use the rollup al
 6. **The 10-line report.** End every session user-facing with ≤10 lines. If it needs more, it's a proposal (P6 material).
 7. **Templates are the token guide.** Fill the template; don't expand beyond it unless the
    phase brief's » markers say to go deep.
+8. **Tier discipline.** Know your declared tier and follow its pattern; let the done-when
+   evidence (not self-image) move you up or down.
 
 ## Moving to a new environment
 
@@ -113,5 +154,6 @@ To onboard a fresh model (frontier or local):
 1. Give it `README.md` + `harness/PHASES.md` (L0). That's the whole architecture.
 2. For a business: run `foundry.py rollup <slug>` and paste it (L1).
 3. Hand it the current phase brief (L2) if it's working, or a single work order if it's executing.
+4. Declare the tier (environment metadata or explicit) — the pattern follows automatically.
 
 Nothing else is needed. No model memory, no chat history, no external state.
