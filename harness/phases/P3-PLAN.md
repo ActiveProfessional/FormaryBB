@@ -26,7 +26,7 @@ A stranger should be able to execute this business from the paper.
 7. **» Plan-follow mechanics** (the "how to ensure the plan is followed" requirement) — a
    section in the master plan that names the operating cadence (weekly/monthly/quarterly
    rituals from RUNBOOK.md), metric targets, review checkpoints, who reviews, and the
-   amendment rule (quarterly gate variance ≥25% → amend). Make adherence checkable.
+   amendment rule (quarterly gate variance ≥10% → amend). Make adherence checkable.
 8. **Localized & personalized details** (» for local/niche types): region specifics (laws,
    geography, market quirks), community connections, founder story and personal constraints,
    named relationships and assets.

@@ -10,8 +10,11 @@ only place a verdict lives.
 3. Walk the automatic-fail list (below). Any hit → **FAIL**. Fix and re-run.
 4. If criteria are met but open items remain, you may pass **CONDITIONAL** — every open
    item must be carried as a tracked task (give it an ID before you write the verdict).
-5. Verdicts requiring the user's sign-off are marked **[U]**. The user must explicitly
-   approve before the verdict is recorded.
+5. **PASS authority:** the orchestrator may record **PASS** on criteria that are fully met
+   by pass criteria alone (mechanical/complete criteria with no open judgment or one-way
+   doors). Criteria marked **[U]** always route to the user first — no model converts a
+   [U] item by itself, ever. **FAIL** is always safe to record — stopping is never a
+   one-way door.
 6. Record with `python3 bin/foundry.py gate <slug> Pn --pass|--conditional|--fail --notes "..."` —
    this creates `businesses/<slug>/gates/Pn-record.md`. Commit.
 7. Announce: phase started/complete, next phase, gate conditions if any.
@@ -98,9 +101,16 @@ only place a verdict lives.
 
 ### Quarterly gate (P7)
 - Run `foundry.py rollup` against the current metrics; compare metrics to targets in
-  `docs/business-plan/` — **variance ≥25% → triggers review** and plan amendment.
+  `docs/business-plan/` — **variance ≥10% → triggers review** and plan amendment.
 - Each compliance item (C-nnn) has status reviewed; anything expired or approaching gets a task.
 - Every decision from the quarter is still consistent with registers (discrepancies → decisions).
+
+## Gate records are history (decision: option a)
+
+A recorded gate is history. Plans amended afterward (supersede convention) do not re-open
+their gate — the **quarterly gate** exists precisely to force plan-vs-reality reconciliation,
+so a second, quieter mechanism would be redundant ceremony. Amendments carry their own
+logged decisions; old gate records stay as they were written.
 
 ## Gate philosophy
 

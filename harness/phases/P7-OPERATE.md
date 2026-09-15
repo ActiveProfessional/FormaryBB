@@ -20,7 +20,7 @@ WORK (tasks) → MEASURE (metrics) → REVIEW (rituals) → ADJUST (tasks, propo
 2. **Task rhythm** — work the register top-down; new work enters as tasks with IDs, never as
    chat promises. Blocked > due-date risk → surface in the weekly review, not in silence.
 3. **Rituals** (see RUNBOOK.md): weekly review (user), monthly snapshot + `validate`,
-   quarterly gate (variance ≥25% → plan amendment; compliance expiry sweep; decision
+   quarterly gate (variance ≥10% → plan amendment; compliance expiry sweep; decision
    consistency check; calendar archive/confirm).
 4. **Records hygiene** — receipts/invoices to `source/`, bookkeeping entries per the accounting
    decision, contract copies to `source/`, renewal dates as C-nnn rows with calendar events.

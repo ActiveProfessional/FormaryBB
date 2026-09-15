@@ -37,7 +37,7 @@ without verifying the executor's evidence.
 - Re-run `validate`; fix drift.
 
 ### Quarterly review (orchestrator + user)
-- Quarterly gate (GATES.md): metrics vs. targets, variance ≥25% triggers plan amendment,
+- Quarterly gate (GATES.md): metrics vs. targets, variance ≥10% triggers plan amendment,
   compliance expiry sweep, decision consistency check.
 - Archive old quarter's calendar events; confirm next quarter's.
 

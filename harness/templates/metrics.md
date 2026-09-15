@@ -19,7 +19,7 @@ a watch-level, and a decision it informs. No vanity metrics.
 | CAC by channel | books / ads platform | monthly | | | | |
 
 **Watch-level rule:** metric crosses its watch-level → it forces a review, and may force a
-P6 proposal. Target vs. actual variance ≥25% at the quarterly gate → plan amendment.
+P6 proposal. Target vs. actual variance ≥10% at the quarterly gate → plan amendment.
 
 ## Snapshot log
 

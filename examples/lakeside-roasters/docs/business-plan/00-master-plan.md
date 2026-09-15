@@ -83,7 +83,7 @@ story, named relationships, personal constraints honored by the plan.
 
 How the plan is followed: operating cadence (weekly review, monthly snapshot, quarterly
 gate), metric targets with watch-levels, who reviews what when, and the amendment rule
-(quarterly variance ≥25% → amend via supersede convention). Include the first review dates.
+(quarterly variance ≥10% → amend via supersede convention). Include the first review dates.
 
 ## 15. Appendices
 
